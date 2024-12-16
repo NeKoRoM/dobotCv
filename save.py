@@ -11,7 +11,6 @@ class CameraSettings:
         return f"CameraSettings(exposure={self.exposure}, focus={self.focus}, hsv_lower={self.hsv_lower}, hsv_upper={self.hsv_upper})"
 
     def to_dict(self):
-        # Конвертуємо об'єкт в словник для збереження в JSON
         return {
             "exposure": self.exposure,
             "focus": self.focus,
@@ -21,7 +20,6 @@ class CameraSettings:
 
     @classmethod
     def from_dict(cls, data):
-        # Створюємо об'єкт з даних у форматі словника
         return cls(
             exposure=data["exposure"],
             focus=data["focus"],
@@ -46,7 +44,6 @@ class RobotPosition:
                 f"j1={self.j1}, j2={self.j2}, j3={self.j3})")
 
     def to_dict(self):
-        # Конвертуємо об'єкт в словник для збереження в JSON
         return {
             "x": self.x,
             "y": self.y,
@@ -60,7 +57,6 @@ class RobotPosition:
 
     @classmethod
     def from_dict(cls, data):
-        # Створюємо об'єкт з даних у форматі словника
         return cls(
             x=data["x"],
             y=data["y"],
@@ -77,11 +73,21 @@ def save_to_json(filename, data):
     with open(filename, "w") as file:
         json.dump([obj.to_dict() for obj in data], file, indent=4)
 
-# Функція для зчитування об'єктів з JSON
+# Функція для зчитування об'єктів з JSON файлу
 def load_from_json(filename, class_type):
     with open(filename, "r") as file:
         data = json.load(file)
         return [class_type.from_dict(item) for item in data]
+
+# Функція для видалення об'єкта за умовою (наприклад, за назвою)
+def delete_object_from_json(filename, class_type, delete_criteria):
+    objects = load_from_json(filename, class_type)
+    updated_objects = [obj for obj in objects if not delete_criteria(obj)]
+    save_to_json(filename, updated_objects)
+
+# Приклад критерію для видалення (видалити за назвою)
+def delete_by_name(obj, name):
+    return obj.name == name
 
 # Створення об'єктів для збереження
 camera1 = CameraSettings(0.01, 1.5, [35, 100, 100], [85, 255, 255])
@@ -93,7 +99,10 @@ robot_pos2 = RobotPosition(150, 250, 100, 45, 60, 45, 30, "PickPosition")
 save_to_json("camera_settings.json", [camera1, camera2])
 save_to_json("robot_positions.json", [robot_pos1, robot_pos2])
 
-# Зчитування об'єктів з JSON файлів
+# Видалення об'єкта з файлу за назвою
+delete_object_from_json("robot_positions.json", RobotPosition, lambda obj: delete_by_name(obj, "PickPosition"))
+
+# Зчитування об'єктів після видалення
 loaded_camera_settings = load_from_json("camera_settings.json", CameraSettings)
 loaded_robot_positions = load_from_json("robot_positions.json", RobotPosition)
 
