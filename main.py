@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from tkinter import ttk
-from robot_position import RobotPosition, CameraSettings, save_to_json, load_from_json, delete_object_from_json
+from save import RobotPosition, CameraSettings, save_to_json, load_from_json, delete_object_from_json
 
 class RobotApp:
     def __init__(self, root):
