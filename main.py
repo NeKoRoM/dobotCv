@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from tkinter import ttk
-from save import RobotPosition, CameraSettings, save_to_json, load_from_json, delete_object_from_json
+from robot_position import RobotPosition, CameraSettings, save_to_json, load_from_json, delete_object_from_json
 
 class RobotApp:
     def __init__(self, root):
@@ -62,6 +62,7 @@ class RobotApp:
         
         self.position_combobox = ttk.Combobox(self.frame_input, state="readonly")
         self.position_combobox.grid(row=8, column=1, padx=5, pady=5)
+        self.position_combobox.bind("<<ComboboxSelected>>", self.on_position_select)
 
         # Кнопки для збереження, завантаження та видалення позицій
         self.save_button = tk.Button(self.frame_buttons, text="Save Position", command=self.save_position)
@@ -107,6 +108,34 @@ class RobotApp:
             messagebox.showinfo("Success", "Positions loaded successfully!")
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred while loading positions: {e}")
+
+    def on_position_select(self, event):
+        # Автозаповнення полів при виборі позиції
+        selected_name = self.position_combobox.get()
+        robot_positions = load_from_json("robot_positions.json", RobotPosition)
+        selected_position = next((pos for pos in robot_positions if pos.name == selected_name), None)
+        
+        if selected_position:
+            self.x_entry.delete(0, tk.END)
+            self.x_entry.insert(0, selected_position.x)
+
+            self.y_entry.delete(0, tk.END)
+            self.y_entry.insert(0, selected_position.y)
+
+            self.z_entry.delete(0, tk.END)
+            self.z_entry.insert(0, selected_position.z)
+
+            self.r_entry.delete(0, tk.END)
+            self.r_entry.insert(0, selected_position.r)
+
+            self.j1_entry.delete(0, tk.END)
+            self.j1_entry.insert(0, selected_position.j1)
+
+            self.j2_entry.delete(0, tk.END)
+            self.j2_entry.insert(0, selected_position.j2)
+
+            self.j3_entry.delete(0, tk.END)
+            self.j3_entry.insert(0, selected_position.j3)
 
     def delete_position(self):
         # Видалення позиції за назвою
