@@ -7,7 +7,15 @@ class RobotApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Robot Position & Camera Settings Manager")
-        
+
+
+        """Ініціалізація підключення до Dobot."""
+        try:
+            self.dobot_controller = DobotController()
+            messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
+        except Exception as e:
+            messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}") 
+            
         # Створення фреймів для групування віджетів
         self.frame_input = tk.Frame(root)
         self.frame_input.pack(pady=10)
@@ -73,6 +81,16 @@ class RobotApp:
 
         self.delete_button = tk.Button(self.frame_buttons, text="Delete Position", command=self.delete_position)
         self.delete_button.grid(row=0, column=2, padx=10, pady=10)
+
+        """Додавання кнопок для керування роботом."""
+        self.update_position_button = tk.Button(self.frame_buttons, text="Update Pos from bot", command=self.update_robot_position)
+        self.update_position_button.grid(row=3, column=0, padx=10, pady=10)
+
+        self.move_button = tk.Button(self.frame_buttons, text="Move", command=self.move_robot_to_position)
+        self.move_button.grid(row=3, column=1, padx=10, pady=10)
+
+        self.suction_button = tk.Button(self.frame_buttons, text="Toggle Suction", command=self.toggle_suction)
+        self.suction_button.grid(row=4, column=0, padx=10, pady=10)
 
         # Завантажити позиції при запуску програми
         self.load_positions()
@@ -149,6 +167,49 @@ class RobotApp:
             self.load_positions()  # Перезавантажити список позицій після видалення
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred while deleting the position: {e}")
+
+    def update_robot_position(self):
+        """Оновлення поточної позиції робота в інтерфейсі."""
+        try:
+            position = self.dobot_controller.get_current_pos()
+            if position:
+                x, y, z, r, *_ = position
+                self.x_entry.delete(0, tk.END)
+                self.x_entry.insert(0, f"{x:.2f}")
+                self.y_entry.delete(0, tk.END)
+                self.y_entry.insert(0, f"{y:.2f}")
+                self.z_entry.delete(0, tk.END)
+                self.z_entry.insert(0, f"{z:.2f}")
+                self.r_entry.delete(0, tk.END)
+                self.r_entry.insert(0, f"{r:.2f}")
+        except Exception as e:
+            messagebox.showerror("Position Error", f"Failed to update position: {e}")
+
+    def move_robot_to_position(self):
+        """Переміщення робота до заданої позиції."""
+        try:
+            x = float(self.x_entry.get())
+            y = float(self.y_entry.get())
+            z = float(self.z_entry.get())
+            r = float(self.r_entry.get())
+            self.dobot_controller.move_to_custom(x, y, z, r)
+            messagebox.showinfo("Movement", f"Robot moved to position: x={x}, y={y}, z={z}, r={r}")
+            self.update_robot_position()
+        except ValueError:
+            messagebox.showerror("Input Error", "Please enter valid numerical values for x, y, z, and r.")
+        except Exception as e:
+            messagebox.showerror("Movement Error", f"Failed to move robot: {e}")
+
+    def toggle_suction(self):
+        """Увімкнення/вимкнення вакуумного насоса."""
+        try:
+            state = not getattr(self, "suction_state", False)
+            self.dobot_controller.toggle_suction(state)
+            self.suction_state = state
+            status = "enabled" if state else "disabled"
+            messagebox.showinfo("Suction", f"Suction cup {status}.")
+        except Exception as e:
+            messagebox.showerror("Suction Error", f"Failed to toggle suction: {e}")
 
 
 if __name__ == "__main__":
