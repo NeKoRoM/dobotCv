@@ -1,87 +1,107 @@
+import json
 
 class CameraSettings:
     def __init__(self, exposure, focus, hsv_lower, hsv_upper):
-        self.exposure = exposure  # Параметр експозиції (наприклад, час експозиції)
-        self.focus = focus        # Параметр фокусу (наприклад, відстань до об'єкта)
-        self.hsv_lower = hsv_lower  # Нижній межа HSV (потрібен формат [H, S, V])
-        self.hsv_upper = hsv_upper  # Верхній межа HSV (потрібен формат [H, S, V])
+        self.exposure = exposure
+        self.focus = focus
+        self.hsv_lower = hsv_lower
+        self.hsv_upper = hsv_upper
 
     def __str__(self):
         return f"CameraSettings(exposure={self.exposure}, focus={self.focus}, hsv_lower={self.hsv_lower}, hsv_upper={self.hsv_upper})"
 
-    def update_exposure(self, new_exposure):
-        self.exposure = new_exposure
+    def to_dict(self):
+        # Конвертуємо об'єкт в словник для збереження в JSON
+        return {
+            "exposure": self.exposure,
+            "focus": self.focus,
+            "hsv_lower": self.hsv_lower,
+            "hsv_upper": self.hsv_upper
+        }
 
-    def update_focus(self, new_focus):
-        self.focus = new_focus
-
-    def update_hsv(self, new_hsv_lower, new_hsv_upper):
-        self.hsv_lower = new_hsv_lower
-        self.hsv_upper = new_hsv_upper
-
-    def get_exposure(self):
-        return self.exposure
-
-    def get_focus(self):
-        return self.focus
-
-    def get_hsv(self):
-        return self.hsv_lower, self.hsv_upper
-
-# Створення об'єкта класу CameraSettings
-camera = CameraSettings(
-    exposure=0.01,          # Приклад значення експозиції (час експозиції 10 мс)
-    focus=1.5,              # Приклад значення фокусу (відстань 1.5 м)
-    hsv_lower=[35, 100, 100],  # Нижній межа HSV (наприклад, [H=35, S=100, V=100])
-    hsv_upper=[85, 255, 255]   # Верхній межа HSV (наприклад, [H=85, S=255, V=255])
-)
+    @classmethod
+    def from_dict(cls, data):
+        # Створюємо об'єкт з даних у форматі словника
+        return cls(
+            exposure=data["exposure"],
+            focus=data["focus"],
+            hsv_lower=data["hsv_lower"],
+            hsv_upper=data["hsv_upper"]
+        )
 
 class RobotPosition:
     def __init__(self, x, y, z, r, j1, j2, j3, name):
-        self.x = x      # Координата X
-        self.y = y      # Координата Y
-        self.z = z      # Координата Z
-        self.r = r      # Кут обертання (rotation)
-        self.j1 = j1    # Кут першого суглоба (joint 1)
-        self.j2 = j2    # Кут другого суглоба (joint 2)
-        self.j3 = j3    # Кут третього суглоба (joint 3)
-        self.name = name  # Назва позиції
+        self.x = x
+        self.y = y
+        self.z = z
+        self.r = r
+        self.j1 = j1
+        self.j2 = j2
+        self.j3 = j3
+        self.name = name
 
     def __str__(self):
         return (f"RobotPosition(name={self.name}, "
                 f"x={self.x}, y={self.y}, z={self.z}, r={self.r}, "
                 f"j1={self.j1}, j2={self.j2}, j3={self.j3})")
 
-    def update_position(self, x=None, y=None, z=None, r=None, j1=None, j2=None, j3=None):
-        if x is not None:
-            self.x = x
-        if y is not None:
-            self.y = y
-        if z is not None:
-            self.z = z
-        if r is not None:
-            self.r = r
-        if j1 is not None:
-            self.j1 = j1
-        if j2 is not None:
-            self.j2 = j2
-        if j3 is not None:
-            self.j3 = j3
+    def to_dict(self):
+        # Конвертуємо об'єкт в словник для збереження в JSON
+        return {
+            "x": self.x,
+            "y": self.y,
+            "z": self.z,
+            "r": self.r,
+            "j1": self.j1,
+            "j2": self.j2,
+            "j3": self.j3,
+            "name": self.name
+        }
 
-    def get_position(self):
-        return (self.x, self.y, self.z, self.r, self.j1, self.j2, self.j3)
+    @classmethod
+    def from_dict(cls, data):
+        # Створюємо об'єкт з даних у форматі словника
+        return cls(
+            x=data["x"],
+            y=data["y"],
+            z=data["z"],
+            r=data["r"],
+            j1=data["j1"],
+            j2=data["j2"],
+            j3=data["j3"],
+            name=data["name"]
+        )
 
-# Створення об'єкта позиції робота
-robot_position = RobotPosition(
-    x=100, y=200, z=50, r=90, j1=45, j2=30, j3=60, name="HomePosition"
-)
+# Функція для збереження об'єктів у JSON
+def save_to_json(filename, data):
+    with open(filename, "w") as file:
+        json.dump([obj.to_dict() for obj in data], file, indent=4)
 
-# Виведення поточної позиції робота
-print(robot_position)
+# Функція для зчитування об'єктів з JSON
+def load_from_json(filename, class_type):
+    with open(filename, "r") as file:
+        data = json.load(file)
+        return [class_type.from_dict(item) for item in data]
 
-# Оновлення позиції
-robot_position.update_position(x=150, y=250, z=100, j1=60, j2=45)
+# Створення об'єктів для збереження
+camera1 = CameraSettings(0.01, 1.5, [35, 100, 100], [85, 255, 255])
+camera2 = CameraSettings(0.02, 2.0, [40, 120, 110], [80, 255, 255])
+robot_pos1 = RobotPosition(100, 200, 50, 90, 45, 30, 60, "HomePosition")
+robot_pos2 = RobotPosition(150, 250, 100, 45, 60, 45, 30, "PickPosition")
 
-# Виведення оновленої позиції
-print("\nUpdated Robot Position:")
-print(robot_position)
+# Збереження об'єктів у JSON файл
+save_to_json("camera_settings.json", [camera1, camera2])
+save_to_json("robot_positions.json", [robot_pos1, robot_pos2])
+
+# Зчитування об'єктів з JSON файлів
+loaded_camera_settings = load_from_json("camera_settings.json", CameraSettings)
+loaded_robot_positions = load_from_json("robot_positions.json", RobotPosition)
+
+# Виведення зчитаних даних
+print("Loaded Camera Settings:")
+for camera in loaded_camera_settings:
+    print(camera)
+
+print("\nLoaded Robot Positions:")
+for robot_pos in loaded_robot_positions:
+    print(robot_pos)
