@@ -1,5 +1,5 @@
 from .cam import Camera
-from .dobot import Dobot
+from .dobot import DobotController
 
 def main():
     # Тут можна написати код, який буде виконуватися під час запуску програми
