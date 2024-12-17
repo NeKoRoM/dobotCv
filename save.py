@@ -1,17 +1,20 @@
 import json
 
 class CameraSettings:
-    def __init__(self, exposure, focus, hsv_lower, hsv_upper):
+    def __init__(self, name, exposure, focus, hsv_lower, hsv_upper):
+        self.name = name
         self.exposure = exposure
         self.focus = focus
         self.hsv_lower = hsv_lower
         self.hsv_upper = hsv_upper
 
     def __str__(self):
-        return f"CameraSettings(exposure={self.exposure}, focus={self.focus}, hsv_lower={self.hsv_lower}, hsv_upper={self.hsv_upper})"
+        return (f"CameraSettings(name={self.name}, exposure={self.exposure}, "
+                f"focus={self.focus}, hsv_lower={self.hsv_lower}, hsv_upper={self.hsv_upper})")
 
     def to_dict(self):
         return {
+            "name": self.name,
             "exposure": self.exposure,
             "focus": self.focus,
             "hsv_lower": self.hsv_lower,
@@ -21,11 +24,13 @@ class CameraSettings:
     @classmethod
     def from_dict(cls, data):
         return cls(
+            name=data["name"],
             exposure=data["exposure"],
             focus=data["focus"],
             hsv_lower=data["hsv_lower"],
             hsv_upper=data["hsv_upper"]
         )
+
 
 class RobotPosition:
     def __init__(self, x, y, z, r, j1, j2, j3, name):
@@ -90,8 +95,8 @@ def delete_by_name(obj, name):
     return obj.name == name
 
 # Створення об'єктів для збереження
-camera1 = CameraSettings(0.01, 1.5, [35, 100, 100], [85, 255, 255])
-camera2 = CameraSettings(0.02, 2.0, [40, 120, 110], [80, 255, 255])
+camera1 = CameraSettings("Camera1", 0.01, 1.5, [35, 100, 100], [85, 255, 255])
+camera2 = CameraSettings("Camera2", 0.02, 2.0, [40, 120, 110], [80, 255, 255])
 robot_pos1 = RobotPosition(100, 200, 50, 90, 45, 30, 60, "HomePosition")
 robot_pos2 = RobotPosition(150, 250, 100, 45, 60, 45, 30, "PickPosition")
 
