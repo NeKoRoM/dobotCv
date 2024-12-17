@@ -12,12 +12,13 @@ class CameraProcessor:
         self.picam2.start()
         time.sleep(2)
 
+        cv2.namedWindow("Camera")
+        cv2.namedWindow("Camera1")
+        
         self.prev_focus = cv2.getTrackbarPos("focus", "Camera") if cv2.getTrackbarPos("focus", "Camera") != -1 else 5
         self.prev_exposure = cv2.getTrackbarPos("exposure", "Camera") if cv2.getTrackbarPos("exposure", "Camera") != -1 else 100
         self.prev_time = time.time()
 
-        cv2.namedWindow("Camera")
-        cv2.namedWindow("Camera1")
 
         self._setup_trackbars()
 
