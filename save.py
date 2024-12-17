@@ -95,22 +95,3 @@ camera2 = CameraSettings(0.02, 2.0, [40, 120, 110], [80, 255, 255])
 robot_pos1 = RobotPosition(100, 200, 50, 90, 45, 30, 60, "HomePosition")
 robot_pos2 = RobotPosition(150, 250, 100, 45, 60, 45, 30, "PickPosition")
 
-# Збереження об'єктів у JSON файл
-save_to_json("camera_settings.json", [camera1, camera2])
-save_to_json("robot_positions.json", [robot_pos1, robot_pos2])
-
-# Видалення об'єкта з файлу за назвою
-delete_object_from_json("robot_positions.json", RobotPosition, lambda obj: delete_by_name(obj, "PickPosition"))
-
-# Зчитування об'єктів після видалення
-loaded_camera_settings = load_from_json("camera_settings.json", CameraSettings)
-loaded_robot_positions = load_from_json("robot_positions.json", RobotPosition)
-
-# Виведення зчитаних даних
-print("Loaded Camera Settings:")
-for camera in loaded_camera_settings:
-    print(camera)
-
-print("\nLoaded Robot Positions:")
-for robot_pos in loaded_robot_positions:
-    print(robot_pos)
