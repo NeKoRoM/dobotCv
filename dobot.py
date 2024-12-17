@@ -9,14 +9,14 @@ class DobotController:
 
     def connect(self):
         """Підключення до робота"""
-        try:
-            port = list_ports.comports()[0].device
-            self.device = Dobot(port=port, verbose=True)
-            print("Підключено до робота.")
-            return True
-        except Exception as e:
-            print(f"Помилка при підключенні: {e}")
-            return False
+       # try:
+        port = list_ports.comports()[0].device
+        self.device = Dobot(port=port, verbose=True)
+        print("Підключено до робота.")
+        return True
+        #except Exception as e:
+            #print(f"Помилка при підключенні: {e}")
+        return False
 
     def get_current_pos(self):
         """Отримання поточної позиції робота"""
