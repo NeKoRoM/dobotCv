@@ -1,3 +1,6 @@
+from tkinter import ttk
+
+
 def create_widgets(self):
     """Create GUI components."""
     frame = ttk.Frame(self.root)
