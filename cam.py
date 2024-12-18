@@ -22,7 +22,7 @@ class CameraProcessor:
 
         self._setup_trackbars()
 
-    def get_camera_params(self):
+    def get_settings(self):
         """
         Отримання поточних параметрів камери з повзунків.
 
@@ -48,7 +48,7 @@ class CameraProcessor:
         )
         return params
 
-    def set_camera_params(camera_settings):
+    def set_settings(camera_settings):
         """
         Встановлення параметрів камери за допомогою повзунків.
 
