@@ -104,6 +104,8 @@ class RobotApp:
 
         # Завантажити позиції при запуску програми
         self.load_positions()
+        continue_flag[0] = False
+
         
     def open_cam_view(self):
         continue_flag[0] = False
