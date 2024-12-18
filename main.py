@@ -134,7 +134,19 @@ class RobotApp:
         selected_settings = next((s for s in saved_settings if s.name == selected_name), None)
         if selected_settings:
             messagebox.showinfo("Selected Settings", f"Settings: {selected_settings}")
-            
+
+    def get_camera_settings(self):
+        return        
+
+    def set_camera_settings(self):
+        return
+    
+    def save_camera_settings(self):
+        return
+    
+    def load_camera_settings(self):
+        return
+
     def save_position(self):
         # Зберігаємо нову позицію робота
         name = self.name_entry.get()
