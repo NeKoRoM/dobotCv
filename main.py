@@ -17,7 +17,8 @@ class RobotApp:
             self.dobot_controller = DobotController()
             messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
         except Exception as e:
-            messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}") 
+            print()
+            #messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}") 
 
         self.camera_processor = CameraProcessor()
         self.camera_processor.run()
