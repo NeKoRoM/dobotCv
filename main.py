@@ -104,6 +104,14 @@ class RobotApp:
         self.frame_camera = tk.Frame(root)
         self.frame_camera.pack(pady=10)
 
+        # Лейбел для відображення поточних налаштувань
+        self.current_settings_label = tk.Label(self.frame_camera, text="Current Settings: None")
+        self.current_settings_label.grid(row=4, column=0, columnspan=2, padx=5, pady=5)
+
+        # Кнопка для завантаження налаштувань з файлу
+        self.load_camera_file_button = tk.Button(self.frame_camera, text="Load Settings from File", command=self.load_settings_from_file)
+        self.load_camera_file_button.grid(row=5, column=0, padx=5, pady=5)
+
         # Поле для назви параметрів камери
         self.camera_params_label = tk.Label(self.frame_camera, text="Settings Name:")
         self.camera_params_label.grid(row=0, column=0, padx=5, pady=5)
@@ -134,6 +142,11 @@ class RobotApp:
         selected_settings = next((s for s in saved_settings if s.name == selected_name), None)
         if selected_settings:
             messagebox.showinfo("Selected Settings", f"Settings: {selected_settings}")
+    
+    def update_current_settings_label(self, settings_name):
+        """Оновлення лейблу з інформацією про поточні вибрані налаштування."""
+        self.current_settings_label.config(text=f"Current Settings: {settings_name}")
+        self.current_settings_label.update()
 
     def get_camera_settings(self):
         return        
@@ -145,6 +158,9 @@ class RobotApp:
         return
     
     def load_camera_settings(self):
+        return
+
+    def load_settings_from_file(self):
         return
 
     def save_position(self):
