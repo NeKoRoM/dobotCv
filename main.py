@@ -139,10 +139,10 @@ class RobotApp:
         self.camera_settings_combobox.bind("<<ComboboxSelected>>", self.on_camera_settings_select)
 
         # Кнопки для роботи з налаштуваннями камери
-        self.get_camera_settings_button = tk.Button(self.frame_camera, text="Get Settings from Camera", command=self.get_camera_settings)
+        self.get_camera_settings_button = tk.Button(self.frame_camera, text="Get Settings from Camera", command=self.get_camera_settings_from_cam)
         self.get_camera_settings_button.grid(row=2, column=0, padx=5, pady=5)
 
-        self.set_camera_settings_button = tk.Button(self.frame_camera, text="Apply Settings to Camera", command=self.set_camera_settings)
+        self.set_camera_settings_button = tk.Button(self.frame_camera, text="Apply Settings to Camera", command=self.set_camera_settings_to_cam)
         self.set_camera_settings_button.grid(row=2, column=1, padx=5, pady=5)
 
         self.save_camera_settings_button = tk.Button(self.frame_camera, text="Save Current Settings", command=self.save_camera_settings)
