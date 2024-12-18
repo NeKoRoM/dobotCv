@@ -18,7 +18,7 @@ class RobotApp:
             messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
         except Exception as e:
             messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}") 
-            
+        self.cam_ui()    
         # Створення фреймів для групування віджетів
         self.frame_input = tk.Frame(root)
         self.frame_input.pack(pady=10)
@@ -97,6 +97,35 @@ class RobotApp:
 
         # Завантажити позиції при запуску програми
         self.load_positions()
+
+
+    def cam_ui(self):
+        # Додавання нового фрейму для роботи з налаштуваннями камери
+        self.frame_camera = tk.Frame(root)
+        self.frame_camera.pack(pady=10)
+
+        # Поле для назви параметрів камери
+        self.camera_params_label = tk.Label(self.frame_camera, text="Settings Name:")
+        self.camera_params_label.grid(row=0, column=0, padx=5, pady=5)
+        self.camera_params_entry = tk.Entry(self.frame_camera)
+        self.camera_params_entry.grid(row=0, column=1, padx=5, pady=5)
+
+        # Випадаючий список для вибору наявних налаштувань
+        self.camera_settings_label = tk.Label(self.frame_camera, text="Select Settings:")
+        self.camera_settings_label.grid(row=1, column=0, padx=5, pady=5)
+        self.camera_settings_combobox = ttk.Combobox(self.frame_camera, state="readonly")
+        self.camera_settings_combobox.grid(row=1, column=1, padx=5, pady=5)
+        self.camera_settings_combobox.bind("<<ComboboxSelected>>", self.on_camera_settings_select)
+
+        # Кнопки для роботи з налаштуваннями камери
+        self.get_camera_settings_button = tk.Button(self.frame_camera, text="Get Settings from Camera", command=self.get_camera_settings)
+        self.get_camera_settings_button.grid(row=2, column=0, padx=5, pady=5)
+
+        self.set_camera_settings_button = tk.Button(self.frame_camera, text="Apply Settings to Camera", command=self.set_camera_settings)
+        self.set_camera_settings_button.grid(row=2, column=1, padx=5, pady=5)
+
+        self.save_camera_settings_button = tk.Button(self.frame_camera, text="Save Current Settings", command=self.save_camera_settings)
+        self.save_camera_settings_button.grid(row=3, column=0, padx=5, pady=5)
 
     def save_position(self):
         # Зберігаємо нову позицію робота

@@ -47,6 +47,24 @@ class CameraProcessor:
             hsv_upper=hsv_upper
         )
         return params
+
+    def set_camera_params(camera_settings):
+        """
+        Встановлення параметрів камери за допомогою повзунків.
+
+        :param camera_settings: Об'єкт CameraSettings із новими значеннями параметрів.
+        """
+        cv2.setTrackbarPos("focus", "Camera", camera_settings.focus)
+        cv2.setTrackbarPos("exposure", "Camera", camera_settings.exposure)
+
+        cv2.setTrackbarPos("lov_h", "Camera1", camera_settings.hsv_lower[0])
+        cv2.setTrackbarPos("lov_s", "Camera1", camera_settings.hsv_lower[1])
+        cv2.setTrackbarPos("lov_v", "Camera1", camera_settings.hsv_lower[2])
+
+        cv2.setTrackbarPos("high_h", "Camera1", camera_settings.hsv_upper[0])
+        cv2.setTrackbarPos("high_s", "Camera1", camera_settings.hsv_upper[1])
+        cv2.setTrackbarPos("high_v", "Camera1", camera_settings.hsv_upper[2])
+
         
     def _setup_trackbars(self):
         cv2.createTrackbar("focus", "Camera", 5, 25, self._on_trackbar)
