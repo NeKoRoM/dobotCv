@@ -127,6 +127,14 @@ class RobotApp:
         self.save_camera_settings_button = tk.Button(self.frame_camera, text="Save Current Settings", command=self.save_camera_settings)
         self.save_camera_settings_button.grid(row=3, column=0, padx=5, pady=5)
 
+    def on_camera_settings_select(self, event):
+        """Дії при виборі параметрів камери у списку."""
+        selected_name = self.camera_settings_combobox.get()
+        saved_settings = load_from_json("camera_settings.json", CameraSettings)
+        selected_settings = next((s for s in saved_settings if s.name == selected_name), None)
+        if selected_settings:
+            messagebox.showinfo("Selected Settings", f"Settings: {selected_settings}")
+            
     def save_position(self):
         # Зберігаємо нову позицію робота
         name = self.name_entry.get()
