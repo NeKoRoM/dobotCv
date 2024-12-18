@@ -101,10 +101,11 @@ class RobotApp:
 
         # Завантажити позиції при запуску програми
         self.load_positions()
-        camera_thread = threading.Thread(target=self.camera_processor.run(), daemon=True)
-        camera_thread.start()
-        
 
+        
+    def open_cam_view(self):
+        camera_thread = threading.Thread(target=self.camera_processor.run(), daemon=False)
+        camera_thread.start()
 
     def cam_ui(self):
 
@@ -112,6 +113,10 @@ class RobotApp:
         # Додавання нового фрейму для роботи з налаштуваннями камери
         self.frame_camera = tk.Frame(root)
         self.frame_camera.pack(pady=10)
+
+        # Кнопка для відкриття перегляду камери
+        self.open_camera_view_button = tk.Button(self.frame_camera, text="Open Camera View", command=self.open_cam_view)
+        self.open_camera_view_button.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
 
                 # Кнопка для видалення вибраних налаштувань камери
         self.delete_camera_settings_button = tk.Button(self.frame_camera, text="Delete Selected Settings", command=self.delete_camera_settings)
