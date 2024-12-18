@@ -108,7 +108,7 @@ class RobotApp:
     def open_cam_view(self):
         camera_thread = threading.Thread(target=self.camera_processor.run(), daemon=True)
         camera_thread.start()
-        self.init_ui()
+       # self.init_ui()
 
     def cam_ui(self):
 
