@@ -4,6 +4,8 @@ from tkinter import ttk
 from save import RobotPosition, CameraSettings, save_to_json, load_from_json, delete_object_from_json
 from dobot import DobotController
 from cam import CameraProcessor
+import threading
+
 
 
 class RobotApp:
@@ -17,11 +19,9 @@ class RobotApp:
             self.dobot_controller = DobotController()
             messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
         except Exception as e:
-            print()
-            #messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}") 
+            messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}") 
 
         self.camera_processor = CameraProcessor()
-        self.camera_processor.run()
         self.cam_ui()    
         # Створення фреймів для групування віджетів
         self.frame_input = tk.Frame(root)
@@ -101,6 +101,9 @@ class RobotApp:
 
         # Завантажити позиції при запуску програми
         self.load_positions()
+        camera_thread = threading.Thread(target=self.camera_processor.run(), daemon=True)
+        camera_thread.start()
+        
 
 
     def cam_ui(self):
