@@ -22,6 +22,9 @@ class RobotApp:
             messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}") 
 
         self.camera_processor = CameraProcessor()
+        self.init_ui()
+
+    def init_ui(self):
         self.cam_ui()    
         # Створення фреймів для групування віджетів
         self.frame_input = tk.Frame(root)
@@ -101,11 +104,11 @@ class RobotApp:
 
         # Завантажити позиції при запуску програми
         self.load_positions()
-
         
     def open_cam_view(self):
         camera_thread = threading.Thread(target=self.camera_processor.run(), daemon=True)
         camera_thread.start()
+        self.init_ui()
 
     def cam_ui(self):
 
