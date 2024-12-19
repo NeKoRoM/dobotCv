@@ -23,8 +23,7 @@ class RobotApp:
 
         self.camera_processor = CameraProcessor()
         self.init_ui()
-        self.continue_flag = [False]
-        self.camera_thread = None
+        self.continue_flag = [True]  # Ініціалізація атрибута continue_flag
         self.close_cam_view()
 
 
