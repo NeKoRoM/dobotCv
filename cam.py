@@ -167,8 +167,20 @@ class CameraProcessor:
                 parent_idx = hierarchy[0][i][3]
                 parent_contour = contours[parent_idx]
 
-                child_idx = hierarchy[0][i][2]
-                child_contour = contours[child_idx]
+                previosly_child_idx = hierarchy[0][i][2] # first child
+                next_child =  hierarchy[0][previosly_child_idx][0] # second child
+                bigest_child_idx = previosly_child_idx
+
+                while hierarchy[0][previosly_child_idx][0] != -1:
+                    if cv2.contourArea(contours(bigest_child_idx)) <= cv2.contourArea(contours(next_child)):
+                        bigest_child_idx = next_child
+                    previosly_child_idx = hierarchy[0][next_child][0]
+                    next_child = hierarchy[0][previosly_child_idx][0]
+                    
+                        
+
+
+                child_contour = contours[bigest_child_idx]
 
                 self.findPt(contour, parent_contour, output_image, (255, 255, 0))
                 self.findPt(child_contour, contour, output_image, (255, 0, 255))
