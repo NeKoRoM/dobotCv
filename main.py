@@ -112,6 +112,7 @@ class RobotApp:
 
         
     def open_cam_view(self):
+        self.camera_processor.start_camera()  # Запуск камери тут
         self.continue_flag[0] = True      
         self.camera_thread = threading.Thread(target=self.camera_processor.run, daemon=True, args=(self.continue_flag,))
         self.camera_thread.start()

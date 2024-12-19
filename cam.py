@@ -9,8 +9,7 @@ class CameraProcessor:
     def __init__(self):
         self.picam2 = Picamera2()
         self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
-        self.picam2.start()
-        time.sleep(2)
+
 
         cv2.namedWindow("Camera")
         cv2.namedWindow("Camera1")
@@ -21,6 +20,10 @@ class CameraProcessor:
 
 
         self._setup_trackbars()
+
+    def start_camera(self):
+        self.picam2.start()
+        time.sleep(2)
 
     def get_settings(self):
         """
