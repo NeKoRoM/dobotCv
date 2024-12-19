@@ -119,8 +119,7 @@ class RobotApp:
 
     def close_cam_view(self):
         self.continue_flag[0] = False
-        if self.camera_thread is not None:
-            self.camera_thread.join()
+
 
     def cam_ui(self):
 
