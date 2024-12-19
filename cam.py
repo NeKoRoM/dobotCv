@@ -6,15 +6,14 @@ import time
 from save import CameraSettings
 
 class CameraProcessor:
-    def __init__(self):
-        self.picam2 = Picamera2()
-        self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
 
         
 
 
     def start_camera(self):
-        
+        self.picam2 = Picamera2()
+        self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+
         cv2.namedWindow("Camera")
         cv2.namedWindow("Camera1")
         self._setup_trackbars()
