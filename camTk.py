@@ -6,6 +6,7 @@ import time
 from save import CameraSettings
 import tkinter as tk
 from tkinter import ttk
+from PIL import Image, ImageTk
 
 class CameraProcessor:
     def __init__(self, root):
@@ -16,6 +17,8 @@ class CameraProcessor:
         self.prev_focus = 5
         self.prev_exposure = 100
         self.prev_time = time.time()
+        self.image_label = None
+        self.output_image_label = None
 
         self.setup_ui()
 
@@ -61,6 +64,12 @@ class CameraProcessor:
         self.high_v_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_highV)
         self.high_v_scale.grid(row=5, column=0, padx=5, pady=5)
         ttk.Label(self.camera1_frame, text="High V").grid(row=5, column=1, padx=5, pady=5)
+
+        self.image_label = ttk.Label(self.camera1_frame)
+        self.image_label.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
+
+        self.output_image_label = ttk.Label(self.camera_frame)
+        self.output_image_label.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
 
         self.start_button = ttk.Button(self.root, text="Start Camera", command=self.start_camera)
         self.start_button.grid(row=1, column=0, padx=10, pady=10)
@@ -168,6 +177,13 @@ class CameraProcessor:
         cv2.line(output_image, (xL, yL), (x_parentL, y_parentL), color, 1)
         cv2.putText(output_image, f"Right width: {x_parent - x}px", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
 
+    def update_image_label(self, image, label):
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        image = Image.fromarray(image)
+        image_tk = ImageTk.PhotoImage(image)
+        label.config(image=image_tk)
+        label.image = image_tk
+
     def process_frame(self):
         im = self.picam2.capture_array()
 
@@ -227,6 +243,9 @@ class CameraProcessor:
         self.prev_time = current_time
         cv2.putText(self.output_image, f"{fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
+        self.update_image_label(self.image, self.image_label)
+        self.update_image_label(self.output_image, self.output_image_label)
+
     def run(self):
         self.process_frame()
 
@@ -240,8 +259,6 @@ class CameraProcessor:
             self.prev_exposure = exp_track
             self.picam2.set_controls({"ExposureTime": exp_track * 10})
 
-        cv2.imshow("Camera1", self.image)
-        cv2.imshow("Camera", self.output_image)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             self.close_camera()
         else:
