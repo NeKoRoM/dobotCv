@@ -200,11 +200,10 @@ class CameraProcessor:
         self.prev_time = current_time
         cv2.putText(output_image, f"{fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-        cv2.imshow("Camera1", image)
-        cv2.imshow("Camera", output_image)
+
 
     def run(self, continue_flag):
-        while continue_flag[0]:
+        while continue_flag:
             self.process_frame()
 
             focus_track = cv2.getTrackbarPos("focus", "Camera")
@@ -216,7 +215,8 @@ class CameraProcessor:
             if exp_track != self.prev_exposure:
                 self.prev_exposure = exp_track
                 self.picam2.set_controls({"ExposureTime": exp_track * 10})
-
+            cv2.imshow("Camera1", image)
+            cv2.imshow("Camera", output_image)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 

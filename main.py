@@ -112,15 +112,16 @@ class RobotApp:
 
         
     def open_cam_view(self):
-        self.camera_processor.start_camera()  # Запуск камери тут
         self.continue_flag[0] = True      
-        self.camera_thread = threading.Thread(target=self.camera_processor.run(), daemon=True, args=(self.continue_flag,))
+        self.camera_processor.start_camera()  # Запуск камери тут
+        self.camera_thread = threading.Thread(target=self.camera_processor.run, daemon=True, args=(self.continue_flag,))
         self.camera_thread.start()
        # self.init_ui()
 
     def close_cam_view(self):
         self.continue_flag[0] = False
-        self.camera_thread.join()
+        if self.camera_thread is not None:
+            self.camera_thread.join()
 
     def cam_ui(self):
 
