@@ -23,6 +23,8 @@ class RobotApp:
 
         self.camera_processor = CameraProcessor()
         self.init_ui()
+        self.continue_flag[0] = False
+
 
     def init_ui(self):
         self.cam_ui()    
@@ -104,7 +106,6 @@ class RobotApp:
 
         # Завантажити позиції при запуску програми
         self.load_positions()
-        self.continue_flag[0] = False
 
 
 
