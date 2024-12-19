@@ -197,8 +197,8 @@ class CameraProcessor:
         cv2.imshow("Camera1", image)
         cv2.imshow("Camera", output_image)
 
-    def run(self):
-        while True:
+    def run(self, continue_flag):
+        while continue_flag[0]:
             self.process_frame()
 
             focus_track = cv2.getTrackbarPos("focus", "Camera")
