@@ -8,7 +8,9 @@ from save import CameraSettings
 class CameraProcessor:
 
         
-
+    def close_camera(self):
+        self.picam2.close()
+        cv2.destroyAllWindows()
 
     def start_camera(self):
         self.picam2 = Picamera2()

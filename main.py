@@ -119,6 +119,7 @@ class RobotApp:
 
     def close_cam_view(self):
         self.continue_flag[0] = False
+        self.camera_processor.close_camera()  # Закриття камери тут
 
 
     def cam_ui(self):
