@@ -154,13 +154,13 @@ class CameraProcessor:
             cv2.getTrackbarPos("high_v", "Camera1")], np.uint8)
 
         img_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
-        image = cv2.inRange(img_hsv, low_black, high_black)
+        self.image = cv2.inRange(img_hsv, low_black, high_black)
 
-        _, binary = cv2.threshold(image, 200, 255, cv2.THRESH_BINARY)
+        _, binary = cv2.threshold(self.image, 200, 255, cv2.THRESH_BINARY)
         binary = cv2.bitwise_not(binary)
 
         contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        output_image = im
+        self.output_image = im
 
         min_area = 1000
 
@@ -188,17 +188,17 @@ class CameraProcessor:
 
                 child_contour = contours[bigest_child_idx]
 
-                self.findPt(contour, parent_contour, output_image, (255, 255, 0))
-                self.findPt(child_contour, contour, output_image, (255, 0, 255))
+                self.findPt(contour, parent_contour, self.output_image, (255, 255, 0))
+                self.findPt(child_contour, contour, self.output_image, (255, 0, 255))
 
-                cv2.drawContours(output_image, [contour], -1, (0, 255, 0), 1)
-                cv2.drawContours(output_image, [child_contour], -1, (255, 255, 0), 1)
-                cv2.drawContours(output_image, [parent_contour], -1, (0, 0, 255), 1)
+                cv2.drawContours(self.output_image, [contour], -1, (0, 255, 0), 1)
+                cv2.drawContours(self.output_image, [child_contour], -1, (255, 255, 0), 1)
+                cv2.drawContours(self.output_image, [parent_contour], -1, (0, 0, 255), 1)
 
         current_time = time.time()
         fps = 1 / (current_time - self.prev_time)
         self.prev_time = current_time
-        cv2.putText(output_image, f"{fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
+        cv2.putText(self.output_image, f"{fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
 
 
@@ -215,8 +215,8 @@ class CameraProcessor:
             if exp_track != self.prev_exposure:
                 self.prev_exposure = exp_track
                 self.picam2.set_controls({"ExposureTime": exp_track * 10})
-            cv2.imshow("Camera1", image)
-            cv2.imshow("Camera", output_image)
+            cv2.imshow("Camera1", self.image)
+            cv2.imshow("Camera", self.output_image)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
