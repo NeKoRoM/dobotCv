@@ -226,4 +226,4 @@ class CameraProcessor:
 if __name__ == "__main__":
     processor = CameraProcessor()
     processor.start_camera()
-    processor.run()
+    processor.run(True)
