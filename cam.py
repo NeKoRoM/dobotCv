@@ -10,9 +10,6 @@ class CameraProcessor:
         self.picam2 = Picamera2()
         self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
 
-
-        cv2.namedWindow("Camera")
-        cv2.namedWindow("Camera1")
         
         self.prev_focus = cv2.getTrackbarPos("focus", "Camera") if cv2.getTrackbarPos("focus", "Camera") != -1 else 5
         self.prev_exposure = cv2.getTrackbarPos("exposure", "Camera") if cv2.getTrackbarPos("exposure", "Camera") != -1 else 100
@@ -22,6 +19,8 @@ class CameraProcessor:
         self._setup_trackbars()
 
     def start_camera(self):
+        cv2.namedWindow("Camera")
+        cv2.namedWindow("Camera1")
         self.picam2.start()
         time.sleep(2)
 
