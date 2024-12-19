@@ -23,7 +23,9 @@ class RobotApp:
 
         self.camera_processor = CameraProcessor()
         self.init_ui()
-        self.continue_flag[0] = False
+        self.continue_flag = [False]
+        self.camera_thread = None
+        self.close_cam_view()
 
 
     def init_ui(self):
@@ -112,10 +114,14 @@ class RobotApp:
         
     def open_cam_view(self):
         self.continue_flag[0] = False
-        self.continue_flag = [True]        
+        self.continue_flag[0] = True      
         self.camera_thread = threading.Thread(target=self.camera_processor.run, daemon=True, args=(continue_flag,))
         self.camera_thread.start()
        # self.init_ui()
+
+    def close_cam_view(self):
+        self.continue_flag[0] = False
+        self.camera_thread.join()
 
     def cam_ui(self):
 
@@ -127,6 +133,9 @@ class RobotApp:
         # Кнопка для відкриття перегляду камери
         self.open_camera_view_button = tk.Button(self.frame_camera, text="Open Camera View", command=self.open_cam_view)
         self.open_camera_view_button.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
+        # Кнопка для закриття перегляду камери
+        self.close_camera_view_button = tk.Button(self.frame_camera, text="Close Camera View", command=self.close_cam_view)
+        self.close_camera_view_button.grid(row=6, column=2, padx=5, pady=5)
 
                 # Кнопка для видалення вибраних налаштувань камери
         self.delete_camera_settings_button = tk.Button(self.frame_camera, text="Delete Selected Settings", command=self.delete_camera_settings)
