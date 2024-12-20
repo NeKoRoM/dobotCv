@@ -31,6 +31,10 @@ class CameraSettings:
             hsv_upper=data["hsv_upper"]
         )
 
+    def save(self, filename):
+        with open(filename, "w") as file:
+            json.dump(self.to_dict(), file, indent=4)
+
 
 class RobotPosition:
     def __init__(self, x, y, z, r, j1, j2, j3, name):
