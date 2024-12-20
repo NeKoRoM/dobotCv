@@ -123,20 +123,17 @@ class RobotApp:
 
 
     def cam_ui(self):
-
-
         # Додавання нового фрейму для роботи з налаштуваннями камери
         self.frame_camera = tk.Frame(root)
         self.frame_camera.pack(pady=10)
 
-        # Кнопка для відкриття перегляду камери
-        self.open_camera_view_button = tk.Button(self.frame_camera, text="Open Camera View", command=self.open_cam_view)
-        self.open_camera_view_button.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
-        # Кнопка для закриття перегляду камери
-        self.close_camera_view_button = tk.Button(self.frame_camera, text="Close Camera View", command=self.close_cam_view)
-        self.close_camera_view_button.grid(row=6, column=2, padx=5, pady=5)
+        # Remove buttons for opening and closing camera view
+        # self.open_camera_view_button = tk.Button(self.frame_camera, text="Open Camera View", command=self.open_cam_view)
+        # self.open_camera_view_button.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
+        # self.close_camera_view_button = tk.Button(self.frame_camera, text="Close Camera View", command=self.close_cam_view)
+        # self.close_camera_view_button.grid(row=6, column=2, padx=5, pady=5)
 
-                # Кнопка для видалення вибраних налаштувань камери
+        # Кнопка для видалення вибраних налаштувань камери
         self.delete_camera_settings_button = tk.Button(self.frame_camera, text="Delete Selected Settings", command=self.delete_camera_settings)
         self.delete_camera_settings_button.grid(row=5, column=1, padx=5, pady=5)
 
@@ -161,15 +158,14 @@ class RobotApp:
         self.camera_settings_combobox.grid(row=1, column=1, padx=5, pady=5)
         self.camera_settings_combobox.bind("<<ComboboxSelected>>", self.on_camera_settings_select)
 
-        # Кнопки для роботи з налаштуваннями камери
-        self.get_camera_settings_button = tk.Button(self.frame_camera, text="Get Settings from Camera", command=self.get_camera_settings_from_cam)
-        self.get_camera_settings_button.grid(row=2, column=0, padx=5, pady=5)
+        # Remove buttons for getting and saving settings from/to camera
+        # self.get_camera_settings_button = tk.Button(self.frame_camera, text="Get Settings from Camera", command=self.get_camera_settings_from_cam)
+        # self.get_camera_settings_button.grid(row=2, column=0, padx=5, pady=5)
+        # self.save_camera_settings_button = tk.Button(self.frame_camera, text="Save Current Settings", command=self.save_camera_settings)
+        # self.save_camera_settings_button.grid(row=3, column=0, padx=5, pady=5)
 
         self.set_camera_settings_button = tk.Button(self.frame_camera, text="Apply Settings to Camera", command=self.set_camera_settings_to_cam)
         self.set_camera_settings_button.grid(row=2, column=1, padx=5, pady=5)
-
-        self.save_camera_settings_button = tk.Button(self.frame_camera, text="Save Current Settings", command=self.save_camera_settings)
-        self.save_camera_settings_button.grid(row=3, column=0, padx=5, pady=5)
 
     def on_camera_settings_select(self, event):
         """Дії при виборі параметрів камери у списку."""
