@@ -7,6 +7,7 @@ from dobot import DobotController
 from camTk import CameraProcessor
 import threading
 from robotControl import init_robot_ui
+from managerTab import init_manager_ui
 
 
 
@@ -20,12 +21,15 @@ class RobotApp:
 
         self.robot_frame = tk.Frame(self.notebook)
         self.camera_frame = tk.Frame(self.notebook)
+        self.manager_frame = tk.Frame(self.notebook)
 
         self.notebook.add(self.robot_frame, text="Robot Control")
         self.notebook.add(self.camera_frame, text="Camera Settings")
+        self.notebook.add(self.manager_frame, text="Manager")
 
         init_robot_ui(self.robot_frame)
         self.camera_processor = CameraProcessor(self.camera_frame)
+        init_manager_ui(self.manager_frame)
 
         self.continue_flag = [True]  # Ініціалізація атрибута continue_flag
         self.camera_thread = None
