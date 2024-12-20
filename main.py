@@ -146,11 +146,11 @@ class RobotApp:
         self.load_camera_file_button = tk.Button(self.frame_camera, text="Load Settings from File", command=self.load_settings_from_file)
         self.load_camera_file_button.grid(row=5, column=0, padx=5, pady=5)
 
-        # Поле для назви параметрів камери
-        self.camera_params_label = tk.Label(self.frame_camera, text="Settings Name:")
-        self.camera_params_label.grid(row=0, column=0, padx=5, pady=5)
-        self.camera_params_entry = tk.Entry(self.frame_camera)
-        self.camera_params_entry.grid(row=0, column=1, padx=5, pady=5)
+        # Remove the "Settings Name:" field
+        # self.camera_params_label = tk.Label(self.frame_camera, text="Settings Name:")
+        # self.camera_params_label.grid(row=0, column=0, padx=5, pady=5)
+        # self.camera_params_entry = tk.Entry(self.frame_camera)
+        # self.camera_params_entry.grid(row=0, column=1, padx=5, pady=5)
 
         # Випадаючий список для вибору наявних налаштувань
         self.camera_settings_label = tk.Label(self.frame_camera, text="Select Settings:")
@@ -182,7 +182,17 @@ class RobotApp:
         self.current_settings_label.update()
 
     def delete_camera_settings(self):
-        return
+        """Видалення вибраних налаштувань камери."""
+        try:
+            selected_name = self.camera_settings_combobox.get()
+            if not selected_name:
+                messagebox.showwarning("Warning", "Please select settings to delete.")
+                return
+            delete_object_from_json("camera_settings.json", CameraSettings, lambda obj: obj.name == selected_name)
+            messagebox.showinfo("Success", f"Settings '{selected_name}' deleted!")
+            self.load_settings_from_file()  # Перезавантажити список налаштувань після видалення
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to delete settings: {e}")
 
     def get_camera_settings_from_cam(self):
         """Зчитуємо параметри з камери."""
