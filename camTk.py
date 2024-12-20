@@ -33,86 +33,93 @@ class CameraProcessor:
         self.high_s_value = None
         self.high_v_value = None
 
+        self.root.geometry("800x600")  # Set a fixed window size
+        self.root.resizable(False, False)  # Disable window resizing
+
         self.setup_ui()
 
     def setup_ui(self):
         self.root.title("Camera Interface")
 
         self.camera_frame = ttk.LabelFrame(self.root, text="Camera")
-        self.camera_frame.grid(row=0, column=0, padx=10, pady=10)
+        self.camera_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
         self.camera1_frame = ttk.LabelFrame(self.root, text="Camera1")
-        self.camera1_frame.grid(row=0, column=1, padx=10, pady=10)
+        self.camera1_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+        self.root.grid_columnconfigure(0, weight=1)
+        self.root.grid_columnconfigure(1, weight=1)
+        self.root.grid_rowconfigure(0, weight=1)
 
         self.focus_value = tk.StringVar()
         self.focus_scale = ttk.Scale(self.camera_frame, from_=0, to=25, orient=tk.HORIZONTAL, command=self._on_trackbar)
         self.focus_scale.set(self.prev_focus)
-        self.focus_scale.grid(row=0, column=0, padx=5, pady=5)
-        ttk.Label(self.camera_frame, text="Focus").grid(row=0, column=1, padx=5, pady=5)
-        ttk.Entry(self.camera_frame, textvariable=self.focus_value, width=5).grid(row=0, column=2, padx=5, pady=5)
+        self.focus_scale.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(self.camera_frame, text="Focus").grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera_frame, textvariable=self.focus_value, width=5).grid(row=0, column=2, padx=5, pady=5, sticky="w")
         self.focus_value.set(self.prev_focus)
 
         self.exposure_value = tk.StringVar()
         self.exposure_scale = ttk.Scale(self.camera_frame, from_=0, to=100000, orient=tk.HORIZONTAL, command=self._on_trackbar_exp)
         self.exposure_scale.set(self.prev_exposure)
-        self.exposure_scale.grid(row=1, column=0, padx=5, pady=5)
-        ttk.Label(self.camera_frame, text="Exposure").grid(row=1, column=1, padx=5, pady=5)
-        ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10).grid(row=1, column=2, padx=5, pady=5)
+        self.exposure_scale.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(self.camera_frame, text="Exposure").grid(row=1, column=1, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10).grid(row=1, column=2, padx=5, pady=5, sticky="w")
         self.exposure_value.set(self.prev_exposure)
 
         self.lov_h_value = tk.StringVar()
         self.lov_h_scale = ttk.Scale(self.camera1_frame, from_=0, to=180, orient=tk.HORIZONTAL, command=self._on_trackbar_lovH)
-        self.lov_h_scale.grid(row=0, column=0, padx=5, pady=5)
-        ttk.Label(self.camera1_frame, text="Low H").grid(row=0, column=1, padx=5, pady=5)
-        ttk.Entry(self.camera1_frame, textvariable=self.lov_h_value, width=5).grid(row=0, column=2, padx=5, pady=5)
+        self.lov_h_scale.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(self.camera1_frame, text="Low H").grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera1_frame, textvariable=self.lov_h_value, width=5).grid(row=0, column=2, padx=5, pady=5, sticky="w")
         self.lov_h_value.set(0)
 
         self.lov_s_value = tk.StringVar()
         self.lov_s_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_lovS)
-        self.lov_s_scale.grid(row=1, column=0, padx=5, pady=5)
-        ttk.Label(self.camera1_frame, text="Low S").grid(row=1, column=1, padx=5, pady=5)
-        ttk.Entry(self.camera1_frame, textvariable=self.lov_s_value, width=5).grid(row=1, column=2, padx=5, pady=5)
+        self.lov_s_scale.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(self.camera1_frame, text="Low S").grid(row=1, column=1, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera1_frame, textvariable=self.lov_s_value, width=5).grid(row=1, column=2, padx=5, pady=5, sticky="w")
         self.lov_s_value.set(0)
 
         self.lov_v_value = tk.StringVar()
         self.lov_v_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_lovV)
-        self.lov_v_scale.grid(row=2, column=0, padx=5, pady=5)
-        ttk.Label(self.camera1_frame, text="Low V").grid(row=2, column=1, padx=5, pady=5)
-        ttk.Entry(self.camera1_frame, textvariable=self.lov_v_value, width=5).grid(row=2, column=2, padx=5, pady=5)
+        self.lov_v_scale.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(self.camera1_frame, text="Low V").grid(row=2, column=1, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera1_frame, textvariable=self.lov_v_value, width=5).grid(row=2, column=2, padx=5, pady=5, sticky="w")
         self.lov_v_value.set(0)
 
         self.high_h_value = tk.StringVar()
         self.high_h_scale = ttk.Scale(self.camera1_frame, from_=0, to=180, orient=tk.HORIZONTAL, command=self._on_trackbar_highH)
-        self.high_h_scale.grid(row=3, column=0, padx=5, pady=5)
-        ttk.Label(self.camera1_frame, text="High H").grid(row=3, column=1, padx=5, pady=5)
-        ttk.Entry(self.camera1_frame, textvariable=self.high_h_value, width=5).grid(row=3, column=2, padx=5, pady=5)
+        self.high_h_scale.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(self.camera1_frame, text="High H").grid(row=3, column=1, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera1_frame, textvariable=self.high_h_value, width=5).grid(row=3, column=2, padx=5, pady=5, sticky="w")
         self.high_h_value.set(0)
 
         self.high_s_value = tk.StringVar()
         self.high_s_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_highS)
-        self.high_s_scale.grid(row=4, column=0, padx=5, pady=5)
-        ttk.Label(self.camera1_frame, text="High S").grid(row=4, column=1, padx=5, pady=5)
-        ttk.Entry(self.camera1_frame, textvariable=self.high_s_value, width=5).grid(row=4, column=2, padx=5, pady=5)
+        self.high_s_scale.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(self.camera1_frame, text="High S").grid(row=4, column=1, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera1_frame, textvariable=self.high_s_value, width=5).grid(row=4, column=2, padx=5, pady=5, sticky="w")
         self.high_s_value.set(0)
 
         self.high_v_value = tk.StringVar()
         self.high_v_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_highV)
-        self.high_v_scale.grid(row=5, column=0, padx=5, pady=5)
-        ttk.Label(self.camera1_frame, text="High V").grid(row=5, column=1, padx=5, pady=5)
-        ttk.Entry(self.camera1_frame, textvariable=self.high_v_value, width=5).grid(row=5, column=2, padx=5, pady=5)
+        self.high_v_scale.grid(row=5, column=0, padx=5, pady=5, sticky="ew")
+        ttk.Label(self.camera1_frame, text="High V").grid(row=5, column=1, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera1_frame, textvariable=self.high_v_value, width=5).grid(row=5, column=2, padx=5, pady=5, sticky="w")
         self.high_v_value.set(0)
 
         self.image_label = ttk.Label(self.camera1_frame)
-        self.image_label.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
+        self.image_label.grid(row=6, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
 
         self.output_image_label = ttk.Label(self.camera_frame)
-        self.output_image_label.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
+        self.output_image_label.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
 
         self.start_button = ttk.Button(self.root, text="Start Camera", command=self.start_camera)
-        self.start_button.grid(row=1, column=0, padx=10, pady=10)
+        self.start_button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
 
         self.stop_button = ttk.Button(self.root, text="Stop Camera", command=self.close_camera)
-        self.stop_button.grid(row=1, column=1, padx=10, pady=10)
+        self.stop_button.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
 
         self.additional_ui()
 
