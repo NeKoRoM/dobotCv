@@ -34,9 +34,6 @@ class CameraProcessor:
         self.high_s_value = None
         self.high_v_value = None
 
-        self.root.geometry("800x600")  # Set a fixed window size
-        self.root.resizable(False, False)  # Disable window resizing
-
         self.setup_ui()
 
     def setup_ui(self):
