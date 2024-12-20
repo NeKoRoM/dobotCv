@@ -6,7 +6,12 @@ import time
 from save import CameraSettings
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image, ImageTk
+try:
+    from PIL import Image, ImageTk
+except ImportError:
+    import os
+    os.system('pip install pillow')
+    from PIL import Image, ImageTk
 
 class CameraProcessor:
     def __init__(self, root):
@@ -76,6 +81,23 @@ class CameraProcessor:
 
         self.stop_button = ttk.Button(self.root, text="Stop Camera", command=self.close_camera)
         self.stop_button.grid(row=1, column=1, padx=10, pady=10)
+
+        self.additional_ui()
+
+    def additional_ui(self):
+        self.snapshot_button = ttk.Button(self.root, text="Take Snapshot", command=self.take_snapshot)
+        self.snapshot_button.grid(row=2, column=0, padx=10, pady=10)
+
+        self.save_settings_button = ttk.Button(self.root, text="Save Settings", command=self.save_settings)
+        self.save_settings_button.grid(row=2, column=1, padx=10, pady=10)
+
+    def take_snapshot(self):
+        if self.output_image is not None:
+            cv2.imwrite("snapshot.png", self.output_image)
+
+    def save_settings(self):
+        settings = self.get_settings()
+        settings.save("camera_settings.json")
 
     def close_camera(self):
         if self.picam2:
@@ -257,12 +279,12 @@ class CameraProcessor:
         exp_track = self.exposure_scale.get()
         if exp_track != self.prev_exposure:
             self.prev_exposure = exp_track
-            self.picam2.set_controls({"ExposureTime": exp_track * 10})
+            self.picam2.set_controls({"ExposureTime": int(exp_track * 10)})  # Ensure exposure time is an integer
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             self.close_camera()
         else:
-            self.root.after(10, self.run)
+            self.root.after(100, self.run)  # Increase delay to reduce frame rate
 
 if __name__ == "__main__":
     root = tk.Tk()
