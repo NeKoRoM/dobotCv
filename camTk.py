@@ -24,6 +24,14 @@ class CameraProcessor:
         self.prev_time = time.time()
         self.image_label = None
         self.output_image_label = None
+        self.focus_value = None
+        self.exposure_value = None
+        self.lov_h_value = None
+        self.lov_s_value = None
+        self.lov_v_value = None
+        self.high_h_value = None
+        self.high_s_value = None
+        self.high_v_value = None
 
         self.setup_ui()
 
@@ -36,39 +44,63 @@ class CameraProcessor:
         self.camera1_frame = ttk.LabelFrame(self.root, text="Camera1")
         self.camera1_frame.grid(row=0, column=1, padx=10, pady=10)
 
+        self.focus_value = tk.StringVar()
         self.focus_scale = ttk.Scale(self.camera_frame, from_=0, to=25, orient=tk.HORIZONTAL, command=self._on_trackbar)
         self.focus_scale.set(self.prev_focus)
         self.focus_scale.grid(row=0, column=0, padx=5, pady=5)
         ttk.Label(self.camera_frame, text="Focus").grid(row=0, column=1, padx=5, pady=5)
+        ttk.Entry(self.camera_frame, textvariable=self.focus_value, width=5).grid(row=0, column=2, padx=5, pady=5)
+        self.focus_value.set(self.prev_focus)
 
+        self.exposure_value = tk.StringVar()
         self.exposure_scale = ttk.Scale(self.camera_frame, from_=0, to=100000, orient=tk.HORIZONTAL, command=self._on_trackbar_exp)
         self.exposure_scale.set(self.prev_exposure)
         self.exposure_scale.grid(row=1, column=0, padx=5, pady=5)
         ttk.Label(self.camera_frame, text="Exposure").grid(row=1, column=1, padx=5, pady=5)
+        ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10).grid(row=1, column=2, padx=5, pady=5)
+        self.exposure_value.set(self.prev_exposure)
 
+        self.lov_h_value = tk.StringVar()
         self.lov_h_scale = ttk.Scale(self.camera1_frame, from_=0, to=180, orient=tk.HORIZONTAL, command=self._on_trackbar_lovH)
         self.lov_h_scale.grid(row=0, column=0, padx=5, pady=5)
         ttk.Label(self.camera1_frame, text="Low H").grid(row=0, column=1, padx=5, pady=5)
+        ttk.Entry(self.camera1_frame, textvariable=self.lov_h_value, width=5).grid(row=0, column=2, padx=5, pady=5)
+        self.lov_h_value.set(0)
 
+        self.lov_s_value = tk.StringVar()
         self.lov_s_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_lovS)
         self.lov_s_scale.grid(row=1, column=0, padx=5, pady=5)
         ttk.Label(self.camera1_frame, text="Low S").grid(row=1, column=1, padx=5, pady=5)
+        ttk.Entry(self.camera1_frame, textvariable=self.lov_s_value, width=5).grid(row=1, column=2, padx=5, pady=5)
+        self.lov_s_value.set(0)
 
+        self.lov_v_value = tk.StringVar()
         self.lov_v_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_lovV)
         self.lov_v_scale.grid(row=2, column=0, padx=5, pady=5)
         ttk.Label(self.camera1_frame, text="Low V").grid(row=2, column=1, padx=5, pady=5)
+        ttk.Entry(self.camera1_frame, textvariable=self.lov_v_value, width=5).grid(row=2, column=2, padx=5, pady=5)
+        self.lov_v_value.set(0)
 
+        self.high_h_value = tk.StringVar()
         self.high_h_scale = ttk.Scale(self.camera1_frame, from_=0, to=180, orient=tk.HORIZONTAL, command=self._on_trackbar_highH)
         self.high_h_scale.grid(row=3, column=0, padx=5, pady=5)
         ttk.Label(self.camera1_frame, text="High H").grid(row=3, column=1, padx=5, pady=5)
+        ttk.Entry(self.camera1_frame, textvariable=self.high_h_value, width=5).grid(row=3, column=2, padx=5, pady=5)
+        self.high_h_value.set(0)
 
+        self.high_s_value = tk.StringVar()
         self.high_s_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_highS)
         self.high_s_scale.grid(row=4, column=0, padx=5, pady=5)
         ttk.Label(self.camera1_frame, text="High S").grid(row=4, column=1, padx=5, pady=5)
+        ttk.Entry(self.camera1_frame, textvariable=self.high_s_value, width=5).grid(row=4, column=2, padx=5, pady=5)
+        self.high_s_value.set(0)
 
+        self.high_v_value = tk.StringVar()
         self.high_v_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_highV)
         self.high_v_scale.grid(row=5, column=0, padx=5, pady=5)
         ttk.Label(self.camera1_frame, text="High V").grid(row=5, column=1, padx=5, pady=5)
+        ttk.Entry(self.camera1_frame, textvariable=self.high_v_value, width=5).grid(row=5, column=2, padx=5, pady=5)
+        self.high_v_value.set(0)
 
         self.image_label = ttk.Label(self.camera1_frame)
         self.image_label.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
@@ -142,37 +174,29 @@ class CameraProcessor:
         self.high_s_scale.set(camera_settings.hsv_upper[1])
         self.high_v_scale.set(camera_settings.hsv_upper[2])
 
-    @staticmethod
-    def _on_trackbar(val):
-        pass
+    def _on_trackbar(self, val):
+        self.focus_value.set(val)
 
-    @staticmethod
-    def _on_trackbar_exp(val):
-        pass
+    def _on_trackbar_exp(self, val):
+        self.exposure_value.set(val)
 
-    @staticmethod
-    def _on_trackbar_lovH(val):
-        pass
+    def _on_trackbar_lovH(self, val):
+        self.lov_h_value.set(val)
 
-    @staticmethod
-    def _on_trackbar_lovS(val):
-        pass
+    def _on_trackbar_lovS(self, val):
+        self.lov_s_value.set(val)
 
-    @staticmethod
-    def _on_trackbar_lovV(val):
-        pass
+    def _on_trackbar_lovV(self, val):
+        self.lov_v_value.set(val)
 
-    @staticmethod
-    def _on_trackbar_highH(val):
-        pass
+    def _on_trackbar_highH(self, val):
+        self.high_h_value.set(val)
 
-    @staticmethod
-    def _on_trackbar_highS(val):
-        pass
+    def _on_trackbar_highS(self, val):
+        self.high_s_value.set(val)
 
-    @staticmethod
-    def _on_trackbar_highV(val):
-        pass
+    def _on_trackbar_highV(self, val):
+        self.high_v_value.set(val)
 
     @staticmethod
     def findPt(contour_main, parent_contour_second, output_image, color=(0, 255, 255)):
