@@ -110,10 +110,10 @@ class CameraProcessor:
         self.high_v_value.set(0)
 
         self.image_label = ttk.Label(self.camera1_frame)
-        self.image_label.grid(row=6, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")
+        self.image_label.grid(row=6, column=0, columnspan=2, padx=5, pady=5)
 
         self.output_image_label = ttk.Label(self.camera_frame)
-        self.output_image_label.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")
+        self.output_image_label.grid(row=2, column=0, columnspan=2, padx=5, pady=5)
 
         self.start_button = ttk.Button(self.root, text="Start Camera", command=self.start_camera)
         self.start_button.grid(row=1, column=0, padx=10, pady=10, sticky="ew")
