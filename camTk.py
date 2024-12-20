@@ -1,3 +1,4 @@
+import json
 import cv2
 import numpy as np
 from picamera2 import Picamera2
@@ -134,7 +135,26 @@ class CameraProcessor:
 
     def save_settings(self):
         settings = self.get_settings()
-        settings.save("camera_settings.json")
+        current_settings = self.load_settings()
+        current_settings.append(settings)
+        self.save_settings_to_file(current_settings)
+
+    def load_settings(self):
+        try:
+            with open("camera_settings.json", "r") as file:
+                data = json.load(file)
+                return [CameraSettings.from_dict(item) for item in data]
+        except FileNotFoundError:
+            return []
+
+    def save_settings_to_file(self, settings):
+        with open("camera_settings.json", "w") as file:
+            json.dump([s.to_dict() for s in settings], file, indent=4)
+
+    def delete_settings(self, name):
+        settings = self.load_settings()
+        settings = [s for s in settings if s.name != name]
+        self.save_settings_to_file(settings)
 
     def get_settings(self):
         hsv_lower = [
