@@ -37,8 +37,6 @@ class CameraProcessor:
         self.setup_ui()
 
     def setup_ui(self):
-        self.root.title("Camera Interface")
-
         self.camera_frame = ttk.LabelFrame(self.root, text="Camera")
         self.camera_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
