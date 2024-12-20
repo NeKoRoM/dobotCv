@@ -234,7 +234,7 @@ class CameraProcessor:
         if image is not None:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             image = Image.fromarray(image)
-            image.thumbnail((label.winfo_width(), label.winfo_height()), Image.ANTIALIAS)
+            image = image.resize((label.winfo_width(), label.winfo_height()), Image.ANTIALIAS)
             image_tk = ImageTk.PhotoImage(image)
             label.config(image=image_tk)
             label.image = image_tk
