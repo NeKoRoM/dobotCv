@@ -143,7 +143,10 @@ class CameraProcessor:
         try:
             with open("camera_settings.json", "r") as file:
                 data = json.load(file)
-                return [CameraSettings.from_dict(item) for item in data]
+                if isinstance(data, list):
+                    return [CameraSettings.from_dict(item) for item in data]
+                else:
+                    return [CameraSettings.from_dict(data)]
         except FileNotFoundError:
             return []
 
