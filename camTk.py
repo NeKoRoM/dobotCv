@@ -124,31 +124,17 @@ class CameraProcessor:
         self.additional_ui()
 
     def additional_ui(self):
-        self.snapshot_button = ttk.Button(self.root, text="Take Snapshot", command=self.take_snapshot)
-        self.snapshot_button.grid(row=2, column=0, padx=10, pady=10)
+        # Replace snapshot button with entry field for name
+        self.name_entry = ttk.Entry(self.root, width=20)
+        self.name_entry.grid(row=2, column=0, padx=10, pady=10)
+        self.name_entry.insert(0, "Camera1")
 
         self.save_settings_button = ttk.Button(self.root, text="Save Settings", command=self.save_settings)
         self.save_settings_button.grid(row=2, column=1, padx=10, pady=10)
 
-    def take_snapshot(self):
-        if self.output_image is not None:
-            cv2.imwrite("snapshot.png", self.output_image)
-
     def save_settings(self):
         settings = self.get_settings()
         settings.save("camera_settings.json")
-
-    def close_camera(self):
-        if self.picam2:
-            self.picam2.close()
-        cv2.destroyAllWindows()
-
-    def start_camera(self):
-        self.picam2 = Picamera2()
-        self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
-        self.picam2.start()
-        time.sleep(2)
-        self.run()
 
     def get_settings(self):
         hsv_lower = [
@@ -163,13 +149,25 @@ class CameraProcessor:
         ]
 
         params = CameraSettings(
-            name="Camera1",
+            name=self.name_entry.get(),  # Get name from entry field
             exposure=self.exposure_scale.get(),
             focus=self.focus_scale.get(),
             hsv_lower=hsv_lower,
             hsv_upper=hsv_upper
         )
         return params
+
+    def close_camera(self):
+        if self.picam2:
+            self.picam2.close()
+        cv2.destroyAllWindows()
+
+    def start_camera(self):
+        self.picam2 = Picamera2()
+        self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+        self.picam2.start()
+        time.sleep(2)
+        self.run()
 
     def set_settings(self, camera_settings):
         self.focus_scale.set(camera_settings.focus)
