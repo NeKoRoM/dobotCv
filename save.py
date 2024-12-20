@@ -86,7 +86,10 @@ def save_to_json(filename, data):
 def load_from_json(filename, class_type):
     with open(filename, "r") as file:
         data = json.load(file)
-        return [class_type.from_dict(item) for item in data]
+        if isinstance(data, list):
+            return [class_type.from_dict(item) for item in data]
+        else:
+            return [class_type.from_dict(data)]
 
 # Функція для видалення об'єкта за умовою (наприклад, за назвою)
 def delete_object_from_json(filename, class_type, delete_criteria):
