@@ -110,11 +110,11 @@ class CameraProcessor:
         self.high_v_value.set(0)
 
         self.image_label = ttk.Label(self.camera1_frame)
-        self.image_label.grid(row=6, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+        self.image_label.grid(row=6, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")
         self.image_label.bind('<Configure>', lambda e: self.update_image_label(self.image, self.image_label))
 
         self.output_image_label = ttk.Label(self.camera_frame)
-        self.output_image_label.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+        self.output_image_label.grid(row=2, column=0, columnspan=3, padx=5, pady=5, sticky="nsew")
         self.output_image_label.bind('<Configure>', lambda e: self.update_image_label(self.output_image, self.output_image_label))
 
         self.start_button = ttk.Button(self.root, text="Start Camera", command=self.start_camera)
@@ -233,12 +233,13 @@ class CameraProcessor:
         cv2.putText(output_image, f"Right width: {x_parent - x}px", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
 
     def update_image_label(self, image, label):
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image = Image.fromarray(image)
-        image = image.resize((label.winfo_width(), label.winfo_height()), Image.ANTIALIAS)
-        image_tk = ImageTk.PhotoImage(image)
-        label.config(image=image_tk)
-        label.image = image_tk
+        if image is not None:
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            image = Image.fromarray(image)
+            image = image.resize((label.winfo_width(), label.winfo_height()), Image.ANTIALIAS)
+            image_tk = ImageTk.PhotoImage(image)
+            label.config(image=image_tk)
+            label.image = image_tk
 
     def process_frame(self):
         im = self.picam2.capture_array()
