@@ -4,7 +4,7 @@ from tkinter import messagebox, filedialog
 from tkinter import ttk
 from save import RobotPosition, CameraSettings, save_to_json, load_from_json, delete_object_from_json
 from dobot import DobotController
-from cam import CameraProcessor
+from camTk import CameraProcessor
 import threading
 
 
@@ -14,27 +14,36 @@ class RobotApp:
         self.root = root
         self.root.title("Robot Position & Camera Settings Manager")
 
+        self.notebook = ttk.Notebook(root)
+        self.notebook.pack(expand=True, fill='both')
+
+        self.robot_frame = tk.Frame(self.notebook)
+        self.camera_frame = tk.Frame(self.notebook)
+
+        self.notebook.add(self.robot_frame, text="Robot Control")
+        self.notebook.add(self.camera_frame, text="Camera Settings")
+
+        self.init_ui()
+        self.continue_flag = [True]  # Ініціалізація атрибута continue_flag
+        self.camera_thread = None
+
+        self.camera_processor = CameraProcessor(self.camera_frame)
 
         """Ініціалізація підключення до Dobot."""
         try:
             self.dobot_controller = DobotController()
             messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
         except Exception as e:
-            messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}") 
-
-        self.camera_processor = CameraProcessor()
-        self.init_ui()
-        self.continue_flag = [True]  # Ініціалізація атрибута continue_flag
-        self.camera_thread = None
+            messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}")
 
 
     def init_ui(self):
         self.cam_ui()    
         # Створення фреймів для групування віджетів
-        self.frame_input = tk.Frame(root)
+        self.frame_input = tk.Frame(self.robot_frame)
         self.frame_input.pack(pady=10)
 
-        self.frame_buttons = tk.Frame(root)
+        self.frame_buttons = tk.Frame(self.robot_frame)
         self.frame_buttons.pack(pady=10)
 
         # Введення даних для нової позиції робота
@@ -294,7 +303,7 @@ class RobotApp:
         robot_positions = load_from_json("robot_positions.json", RobotPosition)
         selected_position = next((pos for pos in robot_positions if pos.name == selected_name), None)
         
-        if selected_position:
+        if (selected_position):
             self.x_entry.delete(0, tk.END)
             self.x_entry.insert(0, selected_position.x)
 
