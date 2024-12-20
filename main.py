@@ -1,3 +1,4 @@
+import json
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from tkinter import ttk
@@ -231,6 +232,9 @@ class RobotApp:
             self.camera_settings_combobox['values'] = [s.name for s in saved_settings]
             if saved_settings:
                 self.camera_settings_combobox.set(saved_settings[0].name)
+            messagebox.showinfo("Success", "Camera settings loaded successfully!")
+        except json.JSONDecodeError:
+            messagebox.showerror("Error", "Failed to load settings: Invalid JSON format.")
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load settings: {e}")
 
