@@ -21,6 +21,7 @@ class DobotController:
             if self.device:
                 (x, y, z, r, j1, j2, j3, j4) = self.device.pose()
                 print(f"Поточна позиція: x:{x:.2f} y:{y:.2f} z:{z:.2f} r:{r:.2f}")
+                print(f" Суглоби: j1:{j1:.2f} j2:{j2:.2f} j3:{j3:.2f} j4:{j4:.2f}")
                 return x, y, z, r, j1, j2, j3, j4
             else:
                 print("Робот не підключений.")
