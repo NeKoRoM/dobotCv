@@ -76,7 +76,7 @@ class RobotPosition:
             j1=data["j1"],
             j2=data["j2"],
             j3=data["j3"],
-            j4=data["j4"],
+            j4=data.get("j4", 0),  # Default to 0 if j4 is missing
             name=data["name"]
         )
 
