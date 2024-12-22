@@ -37,7 +37,7 @@ class CameraSettings:
 
 
 class RobotPosition:
-    def __init__(self, x, y, z, r, j1, j2, j3, name):
+    def __init__(self, x, y, z, r, j1, j2, j3, j4, name):
         self.x = x
         self.y = y
         self.z = z
@@ -45,12 +45,13 @@ class RobotPosition:
         self.j1 = j1
         self.j2 = j2
         self.j3 = j3
+        self.j4 = j4
         self.name = name
 
     def __str__(self):
         return (f"RobotPosition(name={self.name}, "
                 f"x={self.x}, y={self.y}, z={self.z}, r={self.r}, "
-                f"j1={self.j1}, j2={self.j2}, j3={self.j3})")
+                f"j1={self.j1}, j2={self.j2}, j3={self.j3}, j4={self.j4})")
 
     def to_dict(self):
         return {
@@ -61,6 +62,7 @@ class RobotPosition:
             "j1": self.j1,
             "j2": self.j2,
             "j3": self.j3,
+            "j4": self.j4,
             "name": self.name
         }
 
@@ -74,6 +76,7 @@ class RobotPosition:
             j1=data["j1"],
             j2=data["j2"],
             j3=data["j3"],
+            j4=data["j4"],
             name=data["name"]
         )
 
@@ -104,6 +107,6 @@ def delete_by_name(obj, name):
 # Створення об'єктів для збереження
 camera1 = CameraSettings("Camera1", 0.01, 1.5, [35, 100, 100], [85, 255, 255])
 camera2 = CameraSettings("Camera2", 0.02, 2.0, [40, 120, 110], [80, 255, 255])
-robot_pos1 = RobotPosition(100, 200, 50, 90, 45, 30, 60, "HomePosition")
-robot_pos2 = RobotPosition(150, 250, 100, 45, 60, 45, 30, "PickPosition")
+robot_pos1 = RobotPosition(100, 200, 50, 90, 45, 30, 60, 90, "HomePosition")
+robot_pos2 = RobotPosition(150, 250, 100, 45, 60, 45, 30, 45, "PickPosition")
 
