@@ -67,10 +67,10 @@ def init_robot_ui(root):
     delete_button = tk.Button(frame_buttons, text="Delete Position", command=lambda: delete_position(position_combobox))
     delete_button.grid(row=0, column=2, padx=10, pady=10)
 
-    update_position_button = tk.Button(frame_buttons, text="Update Pos from bot", command=lambda: update_robot_position(x_entry, y_entry, z_entry, r_entry))
+    update_position_button = tk.Button(frame_buttons, text="Update Pos from bot", command=lambda: update_robot_position(x_entry, y_entry, z_entry, r_entry, j1_entry, j2_entry, j3_entry))
     update_position_button.grid(row=3, column=0, padx=10, pady=10)
 
-    move_button = tk.Button(frame_buttons, text="Move", command=lambda: move_robot_to_position(x_entry, y_entry, z_entry, r_entry))
+    move_button = tk.Button(frame_buttons, text="Move", command=lambda: move_robot_to_position(x_entry, y_entry, z_entry, r_entry, j1_entry, j2_entry, j3_entry))
     move_button.grid(row=3, column=1, padx=10, pady=10)
 
     suction_button = tk.Button(frame_buttons, text="Toggle Suction", command=toggle_suction)
@@ -155,12 +155,12 @@ def delete_position(position_combobox):
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred while deleting the position: {e}")
 
-def update_robot_position(x_entry, y_entry, z_entry, r_entry):
+def update_robot_position(x_entry, y_entry, z_entry, r_entry, j1_entry, j2_entry, j3_entry):
     try:
         dobot_controller = DobotController()
         position = dobot_controller.get_current_pos()
         if position:
-            x, y, z, r, *_ = position
+            x, y, z, r, j1, j2, j3 = position
             x_entry.delete(0, tk.END)
             x_entry.insert(0, f"{x:.2f}")
             y_entry.delete(0, tk.END)
@@ -169,21 +169,30 @@ def update_robot_position(x_entry, y_entry, z_entry, r_entry):
             z_entry.insert(0, f"{z:.2f}")
             r_entry.delete(0, tk.END)
             r_entry.insert(0, f"{r:.2f}")
+            j1_entry.delete(0, tk.END)
+            j1_entry.insert(0, f"{j1:.2f}")
+            j2_entry.delete(0, tk.END)
+            j2_entry.insert(0, f"{j2:.2f}")
+            j3_entry.delete(0, tk.END)
+            j3_entry.insert(0, f"{j3:.2f}")
     except Exception as e:
         messagebox.showerror("Position Error", f"Failed to update position: {e}")
 
-def move_robot_to_position(x_entry, y_entry, z_entry, r_entry):
+def move_robot_to_position(x_entry, y_entry, z_entry, r_entry, j1_entry, j2_entry, j3_entry):
     try:
         x = float(x_entry.get())
         y = float(y_entry.get())
         z = float(z_entry.get())
         r = float(r_entry.get())
+        j1 = float(j1_entry.get())
+        j2 = float(j2_entry.get())
+        j3 = float(j3_entry.get())
         dobot_controller = DobotController()
-        dobot_controller.move_to_custom(x, y, z, r)
-        messagebox.showinfo("Movement", f"Robot moved to position: x={x}, y={y}, z={z}, r={r}")
-        update_robot_position(x_entry, y_entry, z_entry, r_entry)
+        dobot_controller.move_to_custom(x, y, z, r, j1, j2, j3)
+        messagebox.showinfo("Movement", f"Robot moved to position: x={x}, y={y}, z={z}, r={r}, j1={j1}, j2={j2}, j3={j3}")
+        update_robot_position(x_entry, y_entry, z_entry, r_entry, j1_entry, j2_entry, j3_entry)
     except ValueError:
-        messagebox.showerror("Input Error", "Please enter valid numerical values for x, y, z, and r.")
+        messagebox.showerror("Input Error", "Please enter valid numerical values for x, y, z, r, j1, j2, and j3.")
     except Exception as e:
         messagebox.showerror("Movement Error", f"Failed to move robot: {e}")
 
