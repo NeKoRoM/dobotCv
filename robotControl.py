@@ -201,7 +201,7 @@ def move_robot_to_position(x_entry, y_entry, z_entry, r_entry, j1_entry, j2_entr
         j3 = float(j3_entry.get())
         j4 = float(j4_entry.get())
         dobot_controller = DobotController()
-        dobot_controller.move_to_custom(x, y, z, r, j1, j2, j3, j4)
+        dobot_controller.move_to_custom(x, y, z, r)
         messagebox.showinfo("Movement", f"Robot moved to position: x={x}, y={y}, z={z}, r={r}, j1={j1}, j2={j2}, j3={j3}, j4={j4}")
         update_robot_position(x_entry, y_entry, z_entry, r_entry, j1_entry, j2_entry, j3_entry, j4_entry)
     except ValueError:
