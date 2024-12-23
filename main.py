@@ -60,6 +60,9 @@ class RobotApp:
         self.camera_settings_combobox = ttk.Combobox(frame, state="readonly")
         self.camera_settings_combobox.grid(row=3, column=1, padx=5, pady=5)
 
+        self.execute_button = tk.Button(frame, text="Execute Program", command=self.doProgram)
+        self.execute_button.grid(row=4, column=0, columnspan=2, padx=5, pady=5)
+
         self.load_main_program_data()
 
     def load_main_program_data(self):
@@ -95,10 +98,30 @@ class RobotApp:
         pick_position = next((pos for pos in robot_positions if pos.name == pick_position), None)
         place_position = next((pos for pos in robot_positions if pos.name == place_position), None)
         camera_settings = next((settings for settings in camera_settings if settings.name == camera_settings), None)
-
+        pick_position_above = pick_position.copy(z=pick_position.z + 20)
+        pre_plece_position_x = place_position.copy(z=place_position.x + 20)
+        pre_plece_position_y = place_position.copy(z=place_position.y + 20)
+        pre_plece_position_x_above = pre_plece_position_x.copy(z=place_position.z + 20)
+        pre_plece_position_y_above = pre_plece_position_y.copy(z=place_position.z + 20)
         if not pick_position or not place_position or not camera_settings:
             messagebox.showerror("Error", "Invalid positions or camera settings.")
             return
+        
+        # перевірка чи робот в позиції над пікапом
+        current_pos = self.dobot_controller.get_current_pos()
+        self.dobot_controller.move_to_custom(pick_position_above.x, pick_position_above.y, pick_position_above.z, pick_position_above.r)
+        self.dobot_controller.move_to_custom(pick_position.x, pick_position.y, pick_position.z, pick_position.r)
+        self.dobot_controller.toggle_suction(True)  # включення вакууму
+        self.dobot_controller.move_to_custom(pick_position_above.x, pick_position_above.y, pick_position_above.z, pick_position_above.r)    
+        #enable to next move product
+        
+        # перевірка результату камери
+      
+
+
+        
+    def move_to_position(self, position):
+        self.dobot_controller.move_to_custom(position.x, position.y, position.z, position.r)
 
 if __name__ == "__main__":
     root = tk.Tk()
