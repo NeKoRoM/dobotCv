@@ -350,7 +350,7 @@ class CameraProcessor:
         high_black = np.array(camera_settings.hsv_upper, np.uint8)
 
         img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-        self.image = cv2.inRange(img_hsv, low_black, high_black)
+        self.image = cv2.inRange(img_hsv,  high_black,low_black)
 
         _, binary = cv2.threshold(self.image, 200, 255, cv2.THRESH_BINARY)
         binary = cv2.bitwise_not(binary)
