@@ -400,22 +400,6 @@ class CameraProcessor:
                     # Провести вертикальну лінію через центр основного контуру
                     cv2.line(self.output_image, (cX, 0), (cX, self.output_image.shape[0]), (0, 0, 255), 2)
 
-                    # Обчислити кількість чорних пікселів між батьківським і основним контурами з лівої сторони лінії
-                    mask = np.zeros(self.output_image.shape[:2], dtype="uint8")
-                    cv2.drawContours(mask, [parent_contour], -1, 255, -1)
-                    cv2.drawContours(mask, [contour], -1, 0, -1)
-                    black_pixels = 0
-                    for y in range(mask.shape[0]):
-                        for x in range(mask.shape[1]):
-                            if mask[y, x] == 0 and x < cX:
-                                if np.array_equal(self.output_image[y, x], [0, 0, 0]):
-                                    black_pixels += 1
-
-                    result_text = f"Black pixels: {black_pixels}"
-                    cv2.putText(self.output_image, result_text, (cX + 10, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-
-                    result += f"Black pixels between contours and left of the line: {black_pixels}\n"
-                result += f"Contour {i}: Area={area}\n"
 
         self.picam2.close()
         cv2.imshow("Result", binary)  # Display the result image
