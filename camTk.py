@@ -412,7 +412,7 @@ class CameraProcessor:
                                     black_pixels += 1
 
                     result_text = f"Black pixels: {black_pixels}"
-                    cv2.putText(self.image, result_text, (cX + 10, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                    cv2.putText(self.output_image, result_text, (cX + 10, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
                     result += f"Black pixels between contours and left of the line: {black_pixels}\n"
                 result += f"Contour {i}: Area={area}\n"
