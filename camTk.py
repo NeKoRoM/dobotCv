@@ -394,32 +394,32 @@ class CameraProcessor:
                 cv2.drawContours(output_image, [child_contour], -1, (255, 255, 0), 1)
                 cv2.drawContours(output_image, [parent_contour], -1, (0, 0, 255), 1)
                  # Знайти центр основного контуру
-            M = cv2.moments(contour)
-            if M["m00"] != 0:
-                cX = int(M["m10"] / M["m00"])
-                cY = int(M["m01"] / M["m00"])
-                # Намалювати центр основного контуру
-                cv2.circle(output_image, (cX, cY), 5, (0, 0, 255), -1)
+                M = cv2.moments(contour)
+                if M["m00"] != 0:
+                    cX = int(M["m10"] / M["m00"])
+                    cY = int(M["m01"] / M["m00"])
+                    # Намалювати центр основного контуру
+                    cv2.circle(output_image, (cX, cY), 5, (0, 0, 255), -1)
 
-                # Провести вертикальну лінію через центр основного контуру
-                cv2.line(output_image, (cX, 0), (cX, output_image.shape[0]), (0, 0, 255), 2)
+                    # Провести вертикальну лінію через центр основного контуру
+                    cv2.line(output_image, (cX, 0), (cX, output_image.shape[0]), (0, 0, 255), 2)
 
-                # Обчислити кількість чорних пікселів між батьківським і основним контурами з лівої сторони лінії
-                mask = np.zeros(output_image.shape[:2], dtype="uint8")
-                cv2.drawContours(mask, [parent_contour], -1, 255, -1)
-                cv2.drawContours(mask, [contour], -1, 0, -1)
-                black_pixels = 0
-                for y in range(mask.shape[0]):
-                    for x in range(mask.shape[1]):
-                        if mask[y, x] == 255 and x < cX:
-                            if np.array_equal(output_image[y, x], [0, 0, 0]):
-                                black_pixels += 1
+                    # Обчислити кількість чорних пікселів між батьківським і основним контурами з лівої сторони лінії
+                    mask = np.zeros(output_image.shape[:2], dtype="uint8")
+                    cv2.drawContours(mask, [parent_contour], -1, 255, -1)
+                    cv2.drawContours(mask, [contour], -1, 0, -1)
+                    black_pixels = 0
+                    for y in range(mask.shape[0]):
+                        for x in range(mask.shape[1]):
+                            if mask[y, x] == 255 and x < cX:
+                                if np.array_equal(output_image[y, x], [0, 0, 0]):
+                                    black_pixels += 1
 
-                result_text = f"Black pixels: {black_pixels}"
-                cv2.putText(output_image, result_text, (cX + 10, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                    result_text = f"Black pixels: {black_pixels}"
+                    cv2.putText(output_image, result_text, (cX + 10, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
-                result += f"Black pixels between contours and left of the line: {black_pixels}\n"
-                
+                    result += f"Black pixels between contours and left of the line: {black_pixels}\n"
+                    
 
 
                 
