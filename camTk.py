@@ -402,7 +402,7 @@ class CameraProcessor:
 
 
         self.picam2.close()
-        cv2.imshow("Result", binary)  # Display the result image
+        cv2.imshow("Result2", binary)  # Display the result image
         cv2.imshow("Result", self.output_image)  # Display the result image
         cv2.waitKey(0)
         cv2.destroyAllWindows()
