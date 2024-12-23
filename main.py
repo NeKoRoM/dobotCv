@@ -76,7 +76,10 @@ class RobotApp:
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load data: {e}")
 
-    def doProgram(self):
+    def doProgramfin(self):
+
+
+
         pick_position = self.pick_position_combobox.get()
         place_position = self.place_position_combobox.get()
         product_size = self.product_size_entry.get()
@@ -109,14 +112,20 @@ class RobotApp:
         
         # перевірка чи робот в позиції над пікапом
         current_pos = self.dobot_controller.get_current_pos()
-        self.dobot_controller.move_to_custom(pick_position_above.x, pick_position_above.y, pick_position_above.z, pick_position_above.r)
-        self.dobot_controller.move_to_custom(pick_position.x, pick_position.y, pick_position.z, pick_position.r)
-        self.dobot_controller.toggle_suction(True)  # включення вакууму
-        self.dobot_controller.move_to_custom(pick_position_above.x, pick_position_above.y, pick_position_above.z, pick_position_above.r)    
+        # self.dobot_controller.move_to_custom(pick_position_above.x, pick_position_above.y, pick_position_above.z, pick_position_above.r)
+        # self.dobot_controller.move_to_custom(pick_position.x, pick_position.y, pick_position.z, pick_position.r)
+        # self.dobot_controller.toggle_suction(True)  # включення вакууму
+        # self.dobot_controller.move_to_custom(pick_position_above.x, pick_position_above.y, pick_position_above.z, pick_position_above.r)    
         #enable to next move product
-        
+
         # перевірка результату камери
-      
+    def doProgram(self):
+        camera_settings = self.camera_settings_combobox.get()
+        if not camera_settings:
+            messagebox.showerror("Error", "Please select camera settings.")
+            return
+        camera_settings = next((settings for settings in load_from_json("camera_settings.json", CameraSettings) if settings.name == camera_settings), None)
+        self.camera_processor.analyze_image(camera_settings)   
 
 
         
