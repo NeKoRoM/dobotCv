@@ -350,7 +350,7 @@ class CameraProcessor:
         high_black = np.array(camera_settings.hsv_upper, np.uint8)
 
         img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-        self.image = cv2.inRange(img_hsv,  high_black,low_black)
+        self.image = cv2.inRange(img_hsv, low_black, high_black)
 
         _, binary = cv2.threshold(self.image, 200, 255, cv2.THRESH_BINARY)
         binary = cv2.bitwise_not(binary)
@@ -395,14 +395,30 @@ class CameraProcessor:
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
                     # Намалювати центр основного контуру
-                    cv2.circle(self.output_image, (cX, cY), 5, (0, 0, 255), -1)
+                    cv2.circle(self.image, (cX, cY), 5, (0, 0, 255), -1)
 
                     # Провести вертикальну лінію через центр основного контуру
-                    cv2.line(self.output_image, (cX, 0), (cX, self.output_image.shape[0]), (0, 0, 255), 2)
+                    cv2.line(self.image, (cX, 0), (cX, self.output_image.shape[0]), (0, 0, 255), 2)
 
+                    # Обчислити кількість чорних пікселів між батьківським і основним контурами з лівої сторони лінії
+                    mask = np.zeros(self.image.shape[:2], dtype="uint8")
+                    cv2.drawContours(mask, [parent_contour], -1, 255, -1)
+                    cv2.drawContours(mask, [contour], -1, 0, -1)
+                    black_pixels = 0
+                    for y in range(mask.shape[0]):
+                        for x in range(mask.shape[1]):
+                            if mask[y, x] == 255 and x < cX:
+                                if np.array_equal(self.image[y, x], [0, 0, 0]):
+                                    black_pixels += 1
+
+                    result_text = f"Black pixels: {black_pixels}"
+                    cv2.putText(self.image, result_text, (cX + 10, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+
+                    result += f"Black pixels between contours and left of the line: {black_pixels}\n"
+                result += f"Contour {i}: Area={area}\n"
 
         self.picam2.close()
-        cv2.imshow("Result2", binary)  # Display the result image
+        cv2.imshow("Result", self.image )  # Display the result image
         cv2.imshow("Result", self.output_image)  # Display the result image
         cv2.waitKey(0)
         cv2.destroyAllWindows()
