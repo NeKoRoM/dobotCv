@@ -274,6 +274,8 @@ class CameraProcessor:
 
         img_hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
         self.image = cv2.inRange(img_hsv, low_black, high_black)
+        #_, binary = cv2.threshold(self.image, 200, 255, cv2.THRESH_BINARY)
+        self.image = cv2.bitwise_not(self.image)
 
 
         contours, hierarchy = cv2.findContours(self.image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
