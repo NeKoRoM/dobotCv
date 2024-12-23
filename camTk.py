@@ -350,13 +350,13 @@ class CameraProcessor:
         high_black = np.array(camera_settings.hsv_upper, np.uint8)
 
         img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(img_hsv, low_black, high_black)
+        self.image = cv2.inRange(img_hsv, low_black, high_black)
 
-        _, binary = cv2.threshold(mask, 200, 255, cv2.THRESH_BINARY)
+        _, binary = cv2.threshold(self.image, 200, 255, cv2.THRESH_BINARY)
         binary = cv2.bitwise_not(binary)
 
         contours, hierarchy = cv2.findContours(binary, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        output_image = image.copy()
+        self.output_image = image.copy()
 
         min_area = 1000
         result = ""
@@ -365,10 +365,7 @@ class CameraProcessor:
             area = cv2.contourArea(contour)
             if area < min_area:
                 continue
-# hierarchy[0][i][0]: Індекс наступного контуру на тому ж рівні ієрархії.
-# hierarchy[0][i][1]: Індекс попереднього контуру на тому ж рівні ієрархії.
-# hierarchy[0][i][2]: Індекс першого дочірнього контуру.
-# hierarchy[0][i][3]: Індекс батьківського контуру.
+
             if hierarchy[0][i][2] != -1 and hierarchy[0][i][3] != -1:
                 parent_idx = hierarchy[0][i][3]
                 parent_contour = contours[parent_idx]
@@ -385,49 +382,44 @@ class CameraProcessor:
 
                 child_contour = contours[bigest_child_idx]
 
+                self.findPt(contour, parent_contour, self.output_image, (255, 255, 0))
+                self.findPt(child_contour, contour, self.output_image, (255, 0, 255))
 
+                cv2.drawContours(self.output_image, [contour], -1, (0, 255, 0), 1)
+                cv2.drawContours(self.output_image, [child_contour], -1, (255, 255, 0), 1)
+                cv2.drawContours(self.output_image, [parent_contour], -1, (0, 0, 255), 1)
 
-                self.findPt(contour, parent_contour, output_image, (255, 255, 0))
-                self.findPt(child_contour, contour, output_image, (255, 0, 255))
-
-                cv2.drawContours(output_image, [contour], -1, (0, 255, 0), 1)
-                cv2.drawContours(output_image, [child_contour], -1, (255, 255, 0), 1)
-                cv2.drawContours(output_image, [parent_contour], -1, (0, 0, 255), 1)
-                 # Знайти центр основного контуру
+                # Знайти центр основного контуру
                 M = cv2.moments(contour)
                 if M["m00"] != 0:
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
                     # Намалювати центр основного контуру
-                    cv2.circle(binary, (cX, cY), 5, (0, 0, 255), -1)
+                    cv2.circle(self.output_image, (cX, cY), 5, (0, 0, 255), -1)
 
                     # Провести вертикальну лінію через центр основного контуру
-                    cv2.line(binary, (cX, 0), (cX, binary.shape[0]), (0, 0, 255), 2)
+                    cv2.line(self.output_image, (cX, 0), (cX, self.output_image.shape[0]), (0, 0, 255), 2)
 
                     # Обчислити кількість чорних пікселів між батьківським і основним контурами з лівої сторони лінії
-                    mask = np.zeros(binary.shape[:2], dtype="uint8")
+                    mask = np.zeros(self.output_image.shape[:2], dtype="uint8")
                     cv2.drawContours(mask, [parent_contour], -1, 255, -1)
                     cv2.drawContours(mask, [contour], -1, 0, -1)
                     black_pixels = 0
                     for y in range(mask.shape[0]):
                         for x in range(mask.shape[1]):
                             if mask[y, x] == 255 and x < cX:
-                                if np.array_equal(binary[y, x], [0, 0, 0]):
+                                if np.array_equal(self.output_image[y, x], [0, 0, 0]):
                                     black_pixels += 1
 
                     result_text = f"Black pixels: {black_pixels}"
-                    cv2.putText(binary, result_text, (cX + 10, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                    cv2.putText(self.output_image, result_text, (cX + 10, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
                     result += f"Black pixels between contours and left of the line: {black_pixels}\n"
-                    
-
-
-                
-
                 result += f"Contour {i}: Area={area}\n"
 
         self.picam2.close()
-        cv2.imshow("Result", binary)  # Display the result image
+        cv2.imshow("Result2", binary)  # Display the result image
+        cv2.imshow("Result", self.output_image)  # Display the result image
         cv2.waitKey(0)
         cv2.destroyAllWindows()
         return result
