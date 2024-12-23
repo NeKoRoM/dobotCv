@@ -6,10 +6,8 @@ from save import RobotPosition, CameraSettings, save_to_json, load_from_json, de
 from dobot import DobotController
 from camTk import CameraProcessor
 import threading
-from robotControl import init_robot_ui
+from robotControl import RobotControl
 from managerTab import init_manager_ui
-
-
 
 class RobotApp:
     def __init__(self, root):
@@ -29,7 +27,8 @@ class RobotApp:
         self.notebook.add(self.manager_frame, text="Manager")
         self.notebook.add(self.main_frame, text="Main Program")
 
-        init_robot_ui(self.robot_frame)
+        self.robot_control = RobotControl()
+        self.robot_control.init_robot_ui(self.robot_frame)
         self.camera_processor = CameraProcessor(self.camera_frame)
         init_manager_ui(self.manager_frame)
         self.init_main_program_ui(self.main_frame)
@@ -43,7 +42,6 @@ class RobotApp:
             messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
         except Exception as e:
             messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}")
-    
 
     def init_main_program_ui(self, frame):
         tk.Label(frame, text="Pick Position:").grid(row=0, column=0, padx=5, pady=5)
@@ -74,6 +72,33 @@ class RobotApp:
             self.camera_settings_combobox['values'] = [settings.name for settings in camera_settings]
         except Exception as e:
             messagebox.showerror("Error", f"Failed to load data: {e}")
+
+    def doProgram(self):
+        pick_position = self.pick_position_combobox.get()
+        place_position = self.place_position_combobox.get()
+        product_size = self.product_size_entry.get()
+        camera_settings = self.camera_settings_combobox.get()
+
+        if not pick_position or not place_position or not product_size or not camera_settings:
+            messagebox.showerror("Error", "Please select all fields.")
+            return
+
+        try:
+            product_size = float(product_size)
+        except Exception as e:
+            messagebox.showerror("Error", f"Invalid product size: {e}")
+            return
+
+        robot_positions = load_from_json("robot_positions.json", RobotPosition)
+        camera_settings = load_from_json("camera_settings.json", CameraSettings)
+
+        pick_position = next((pos for pos in robot_positions if pos.name == pick_position), None)
+        place_position = next((pos for pos in robot_positions if pos.name == place_position), None)
+        camera_settings = next((settings for settings in camera_settings if settings.name == camera_settings), None)
+
+        if not pick_position or not place_position or not camera_settings:
+            messagebox.showerror("Error", "Invalid positions or camera settings.")
+            return
 
 if __name__ == "__main__":
     root = tk.Tk()
