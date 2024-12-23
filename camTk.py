@@ -402,8 +402,8 @@ class CameraProcessor:
 
                     # Обчислити кількість чорних пікселів між батьківським і основним контурами з лівої сторони лінії
                     mask = np.zeros(self.output_image.shape[:2], dtype="uint8")
-                    cv2.drawContours(mask, [parent_contour], -1, 255, -1)
-                    cv2.drawContours(mask, [contour], -1, 0, -1)
+                    cv2.drawContours(mask, [parent_contour], -1, 0, -1)
+                    cv2.drawContours(mask, [contour], -1, 255, -1)
                     black_pixels = 0
                     for y in range(mask.shape[0]):
                         for x in range(mask.shape[1]):
