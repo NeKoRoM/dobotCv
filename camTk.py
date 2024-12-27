@@ -416,7 +416,7 @@ class CameraProcessor:
                 M = cv2.getRotationMatrix2D(center, angle, 1.0)
                 self.output_image = cv2.warpAffine(self.output_image, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
                 self.image = cv2.warpAffine(self.image, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-                result += f"Contour {i}: Area={area}, Angle={angle}\n"
+                result += f"Contour {i}: Area={area}, Angle={angle}, FATHER={parent_contour}\n"
                 break
 
         # Close the camera and display the results
