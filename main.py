@@ -35,7 +35,7 @@ class RobotApp:
         except Exception as e:
             messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}")
 
-        self.robot_control.init_robot_ui(self.robot_frame)
+        #self.robot_control.init_robot_ui(self.robot_frame)
         self.camera_processor = CameraProcessor(self.camera_frame)
         init_manager_ui(self.manager_frame)
         self.init_main_program_ui(self.main_frame)
