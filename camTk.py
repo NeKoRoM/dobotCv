@@ -338,27 +338,32 @@ class CameraProcessor:
             self.root.after(100, self.run)  # Increase delay to reduce frame rate
 
     def analyze_image(self, camera_settings):
+        # Initialize the camera
         self.picam2 = Picamera2()
         self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
         self.picam2.start()
         time.sleep(2)
 
+        # Apply the provided camera settings
         self.set_settings(camera_settings)
         image = self.picam2.capture_array()
 
+        # Define HSV range for filtering
         low_black = np.array(camera_settings.hsv_lower, np.uint8)
         high_black = np.array(camera_settings.hsv_upper, np.uint8)
 
+        # Convert the image to HSV color space and apply the filter
         img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         self.image = cv2.inRange(img_hsv, low_black, high_black)
 
-
+        # Find contours in the filtered image
         contours, hierarchy = cv2.findContours(self.image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         self.output_image = image.copy()
 
         min_area = 1000
         result = ""
 
+        # Process each contour
         for i, contour in enumerate(contours):
             area = cv2.contourArea(contour)
             if area < min_area:
@@ -380,6 +385,7 @@ class CameraProcessor:
 
                 child_contour = contours[bigest_child_idx]
 
+                # Find points and draw contours
                 self.findPt(contour, parent_contour, self.output_image, (255, 255, 0))
                 self.findPt(child_contour, contour, self.output_image, (255, 0, 255))
 
@@ -387,20 +393,33 @@ class CameraProcessor:
                 cv2.drawContours(self.output_image, [child_contour], -1, (255, 255, 0), 1)
                 cv2.drawContours(self.output_image, [parent_contour], -1, (0, 0, 255), 1)
 
-                # Знайти центр основного контуру
+                # Find the center of the main contour
                 M = cv2.moments(contour)
                 if M["m00"] != 0:
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
-                
-                self.image
 
+                # Find the rotation angle of the main contour
+                rect = cv2.minAreaRect(contour)
+                angle = rect[2]
 
-                result += f"Contour {i}: Area={area}\n"
+                # Rotate the image to make the contour's angle 0
+                if angle < -45:
+                    angle += 90
+                else:
+                    angle -= 90
 
+                (h, w) = self.output_image.shape[:2]
+                center = (w // 2, h // 2)
+                M = cv2.getRotationMatrix2D(center, angle, 1.0)
+                self.output_image = cv2.warpAffine(self.output_image, M, (w, h))
+
+                result += f"Contour {i}: Area={area}, Angle={angle}\n"
+
+        # Close the camera and display the results
         self.picam2.close()
-        cv2.imshow("Result2", self.image )  # Display the result image
-        cv2.imshow("Result", self.output_image)  # Display the result image
+        cv2.imshow("Result2", self.image)  # Display the filtered image
+        cv2.imshow("Result", self.output_image)  # Display the result image with contours
         cv2.waitKey(0)
         cv2.destroyAllWindows()
         return result
