@@ -27,6 +27,14 @@ class RobotApp:
         self.notebook.add(self.manager_frame, text="Manager")
         self.notebook.add(self.main_frame, text="Main Program")
 
+        """Ініціалізація підключення до Dobot."""
+        try:
+            self.robot_control = RobotControl()
+            self.dobot_controller = self.robot_control.dobot_controller
+            messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
+        except Exception as e:
+            messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}")
+
         self.robot_control.init_robot_ui(self.robot_frame)
         self.camera_processor = CameraProcessor(self.camera_frame)
         init_manager_ui(self.manager_frame)
@@ -35,13 +43,6 @@ class RobotApp:
         self.continue_flag = [True]  # Ініціалізація атрибута continue_flag
         self.camera_thread = None
 
-        """Ініціалізація підключення до Dobot."""
-        try:
-            self.robot_control = RobotControl()
-            self.dobot_controller = self.robot_control.dobot_controller
-            messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
-        except Exception as e:
-            messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}")
 
     def init_main_program_ui(self, frame):
         tk.Label(frame, text="Pick Position:").grid(row=0, column=0, padx=5, pady=5)
