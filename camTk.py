@@ -360,13 +360,13 @@ class CameraProcessor:
         contours, hierarchy = cv2.findContours(self.image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         self.output_image = image.copy()
 
-        min_area = 100
+        min_area = 1000
         result = ""
 
         # Process each contour
         for i, contour in enumerate(contours):
             area = cv2.contourArea(contour)
-            if area > min_area:
+            if area < min_area:
                 continue
 
             if hierarchy[0][i][2] != -1 and hierarchy[0][i][3] != -1:
