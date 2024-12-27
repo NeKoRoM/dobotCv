@@ -382,8 +382,10 @@ class CameraProcessor:
                         bigest_child_idx = next_child
                     previosly_child_idx = hierarchy[0][next_child][0]
                     next_child = hierarchy[0][previosly_child_idx][0]
-
                 child_contour = contours[bigest_child_idx]
+                if cv2.contourArea(child_contour) < min_area:
+                    continue
+
 
                 # Find points and draw contours
                 self.findPt(contour, parent_contour, self.output_image, (255, 255, 0))
