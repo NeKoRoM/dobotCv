@@ -403,7 +403,6 @@ class CameraProcessor:
 
 
                 result += f"Contour {i}: Area={area}, FATHER={parent_idx}\n"
-                break
 
         # Close the camera and display the results
         self.picam2.close()
