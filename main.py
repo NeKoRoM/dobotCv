@@ -27,7 +27,6 @@ class RobotApp:
         self.notebook.add(self.manager_frame, text="Manager")
         self.notebook.add(self.main_frame, text="Main Program")
 
-        self.robot_control = RobotControl()
         self.robot_control.init_robot_ui(self.robot_frame)
         self.camera_processor = CameraProcessor(self.camera_frame)
         init_manager_ui(self.manager_frame)
@@ -38,7 +37,8 @@ class RobotApp:
 
         """Ініціалізація підключення до Dobot."""
         try:
-            self.dobot_controller = DobotController()
+            self.robot_control = RobotControl()
+            self.dobot_controller = self.robot_control.dobot_controller
             messagebox.showinfo("Dobot Connected", "Dobot successfully connected.")
         except Exception as e:
             messagebox.showerror("Connection Error", f"Failed to connect Dobot: {e}")
@@ -111,7 +111,7 @@ class RobotApp:
             return
         
         # перевірка чи робот в позиції над пікапом
-        current_pos = self.dobot_controller.get_current_pos()
+        current_pos = self.robot_control.get_current_pos()
         # self.dobot_controller.move_to_custom(pick_position_above.x, pick_position_above.y, pick_position_above.z, pick_position_above.r)
         # self.dobot_controller.move_to_custom(pick_position.x, pick_position.y, pick_position.z, pick_position.r)
         # self.dobot_controller.toggle_suction(True)  # включення вакууму
