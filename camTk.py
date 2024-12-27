@@ -414,8 +414,8 @@ class CameraProcessor:
                 M = cv2.getRotationMatrix2D(center, angle, 1.0)
                 self.output_image = cv2.warpAffine(self.output_image, M, (w, h))
                 self.image = cv2.warpAffine(self.image, M, (w, h))
-
                 result += f"Contour {i}: Area={area}, Angle={angle}\n"
+                break
 
         # Close the camera and display the results
         self.picam2.close()
@@ -423,6 +423,7 @@ class CameraProcessor:
         cv2.imshow("Result", self.output_image)  # Display the result image with contours
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+        print(result)
         return result
 
 if __name__ == "__main__":
