@@ -340,7 +340,7 @@ class CameraProcessor:
     def analyze_image(self, camera_settings):
         # Initialize the camera
         self.picam2 = Picamera2()
-        self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+        self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (1536,864)}))
         self.picam2.start()
         time.sleep(2)
 
