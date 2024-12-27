@@ -402,7 +402,7 @@ class CameraProcessor:
                     cY = int(M["m01"] / M["m00"])
 
 
-                result += f"Contour {i}: Area={area}, FATHER={parent_contour}\n"
+                result += f"Contour {i}: Area={area}, FATHER={parent_idx}\n"
                 break
 
         # Close the camera and display the results
