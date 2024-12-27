@@ -347,6 +347,7 @@ class CameraProcessor:
         # Apply the provided camera settings
         self.set_settings(camera_settings)
         image = self.picam2.capture_array()
+        image = cv2.GaussianBlur(image, (5, 5), 0)
 
         # Define HSV range for filtering
         low_black = np.array(camera_settings.hsv_lower, np.uint8)
