@@ -401,22 +401,8 @@ class CameraProcessor:
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
 
-                # Find the rotation angle of the main contour
-                rect = cv2.minAreaRect(contour)
-                angle = rect[2]
 
-                # Rotate the image to make the contour's angle 0
-                if angle < -45:
-                    angle += 90
-                else:
-                    angle -= 90
-
-                (h, w) = self.output_image.shape[:2]
-                center = (w // 2, h // 2)
-                M = cv2.getRotationMatrix2D(center, angle, 1.0)
-                self.output_image = cv2.warpAffine(self.output_image, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-                self.image = cv2.warpAffine(self.image, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-                result += f"Contour {i}: Area={area}, Angle={angle}, FATHER={parent_contour}\n"
+                result += f"Contour {i}: Area={area}, FATHER={parent_contour}\n"
                 break
 
         # Close the camera and display the results
