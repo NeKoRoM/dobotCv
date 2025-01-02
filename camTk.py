@@ -350,10 +350,10 @@ class CameraProcessor:
         # Apply the provided camera settings
         self.set_settings(camera_settings)
         image = self.picam2.capture_array()
-        image = cv2.GaussianBlur(image, (2, 2), 0)
+        image = cv2.GaussianBlur(image, (3, 3), 0)
 
             # Морфологічні операції для видалення шуму
-        kernel = np.ones((2, 2), np.uint8)
+        kernel = np.ones((3, 3), np.uint8)
         image = cv2.erode(image, kernel, iterations=1)
         image = cv2.dilate(image, kernel, iterations=1)
 
@@ -366,7 +366,7 @@ class CameraProcessor:
         img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         self.image = cv2.inRange(img_hsv, low_black, high_black)
                     # Морфологічні операції для видалення шуму
-        kernel = np.ones((2, 2), np.uint8)
+        kernel = np.ones((3, 3), np.uint8)
         self.image = cv2.erode(self.image, kernel, iterations=1)
         self.image = cv2.dilate(self.image, kernel, iterations=1)
 
