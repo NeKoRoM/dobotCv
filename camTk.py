@@ -426,11 +426,24 @@ class CameraProcessor:
                     right_area = cv2.contourArea(half_parent_right) - cv2.contourArea(half_contour_right)
                     left_area = cv2.contourArea(half_parent) - cv2.contourArea(half_contour)
                     cv2.putText(self.output_image, f"arreaR: ({right_area}, - {left_area} = {right_area - left_area})", (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-                    #cv2.drawContours(self.output_image, [half_contour_right], -1, (0, 255, 0), 1)
-                    #cv2.drawContours(self.output_image, [half_parent_right], -1, (255, 255, 0), 1)
-                    #draw vertical line from center of main contour
-                    #cv2.line(self.output_image, (cX, 0), (cX, 480), (0, 255, 255), 1)
+                    # Draw contours for the right half
+
+                    # Split contours based on the center Y coordinate
+                    half_contour_top = contour[contour[:, :, 1] <= cY]
+                    half_parent_top = parent_contour[parent_contour[:, :, 1] <= cY]
+                    half_contour_bottom = contour[contour[:, :, 1] >= cY]
+                    half_parent_bottom = parent_contour[parent_contour[:, :, 1] >= cY]
                     
+                    # Draw contours for the top half
+                    cv2.drawContours(self.output_image, [half_contour_top], -1, (0, 255, 0), 1)
+                    cv2.drawContours(self.output_image, [half_parent_top], -1, (255, 0, 0), 1)
+                    
+                    # Calculate areas for the top and bottom halves
+                    top_area = cv2.contourArea(half_parent_top) - cv2.contourArea(half_contour_top)
+                    bottom_area = cv2.contourArea(half_parent_bottom) - cv2.contourArea(half_contour_bottom)
+                    
+                    # Display the calculated areas on the image
+                    cv2.putText(self.output_image, f"areaT: ({top_area}, - {bottom_area} = {top_area - bottom_area})", (cX, cY+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
 
 
                 result += f"Contour {i}: Area={area}, FATHER={parent_idx}\n"
