@@ -52,7 +52,9 @@ class CameraProcessor:
         self.focus_scale.set(self.prev_focus)
         self.focus_scale.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera_frame, text="Focus").grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera_frame, textvariable=self.focus_value, width=5).grid(row=0, column=2, padx=5, pady=5, sticky="w")
+        focus_entry = ttk.Entry(self.camera_frame, textvariable=self.focus_value, width=5)
+        focus_entry.grid(row=0, column=2, padx=5, pady=5, sticky="w")
+        focus_entry.bind("<Return>", self._on_entry_change)
         self.focus_value.set(self.prev_focus)
 
         self.exposure_value = tk.StringVar()
@@ -60,49 +62,63 @@ class CameraProcessor:
         self.exposure_scale.set(self.prev_exposure)
         self.exposure_scale.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera_frame, text="Exposure").grid(row=1, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10).grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        exposure_entry = ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10)
+        exposure_entry.grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        exposure_entry.bind("<Return>", self._on_entry_change)
         self.exposure_value.set(self.prev_exposure)
 
         self.lov_h_value = tk.StringVar()
         self.lov_h_scale = ttk.Scale(self.camera1_frame, from_=0, to=180, orient=tk.HORIZONTAL, command=self._on_trackbar_lovH)
         self.lov_h_scale.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera1_frame, text="Low H").grid(row=0, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera1_frame, textvariable=self.lov_h_value, width=5).grid(row=0, column=2, padx=5, pady=5, sticky="w")
+        lov_h_entry = ttk.Entry(self.camera1_frame, textvariable=self.lov_h_value, width=5)
+        lov_h_entry.grid(row=0, column=2, padx=5, pady=5, sticky="w")
+        lov_h_entry.bind("<Return>", self._on_entry_change)
         self.lov_h_value.set(0)
 
         self.lov_s_value = tk.StringVar()
         self.lov_s_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_lovS)
         self.lov_s_scale.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera1_frame, text="Low S").grid(row=1, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera1_frame, textvariable=self.lov_s_value, width=5).grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        lov_s_entry = ttk.Entry(self.camera1_frame, textvariable=self.lov_s_value, width=5)
+        lov_s_entry.grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        lov_s_entry.bind("<Return>", self._on_entry_change)
         self.lov_s_value.set(0)
 
         self.lov_v_value = tk.StringVar()
         self.lov_v_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_lovV)
         self.lov_v_scale.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera1_frame, text="Low V").grid(row=2, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera1_frame, textvariable=self.lov_v_value, width=5).grid(row=2, column=2, padx=5, pady=5, sticky="w")
+        lov_v_entry = ttk.Entry(self.camera1_frame, textvariable=self.lov_v_value, width=5)
+        lov_v_entry.grid(row=2, column=2, padx=5, pady=5, sticky="w")
+        lov_v_entry.bind("<Return>", self._on_entry_change)
         self.lov_v_value.set(0)
 
         self.high_h_value = tk.StringVar()
         self.high_h_scale = ttk.Scale(self.camera1_frame, from_=0, to=180, orient=tk.HORIZONTAL, command=self._on_trackbar_highH)
         self.high_h_scale.grid(row=3, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera1_frame, text="High H").grid(row=3, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera1_frame, textvariable=self.high_h_value, width=5).grid(row=3, column=2, padx=5, pady=5, sticky="w")
+        high_h_entry = ttk.Entry(self.camera1_frame, textvariable=self.high_h_value, width=5)
+        high_h_entry.grid(row=3, column=2, padx=5, pady=5, sticky="w")
+        high_h_entry.bind("<Return>", self._on_entry_change)
         self.high_h_value.set(0)
 
         self.high_s_value = tk.StringVar()
         self.high_s_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_highS)
         self.high_s_scale.grid(row=4, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera1_frame, text="High S").grid(row=4, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera1_frame, textvariable=self.high_s_value, width=5).grid(row=4, column=2, padx=5, pady=5, sticky="w")
+        high_s_entry = ttk.Entry(self.camera1_frame, textvariable=self.high_s_value, width=5)
+        high_s_entry.grid(row=4, column=2, padx=5, pady=5, sticky="w")
+        high_s_entry.bind("<Return>", self._on_entry_change)
         self.high_s_value.set(0)
 
         self.high_v_value = tk.StringVar()
         self.high_v_scale = ttk.Scale(self.camera1_frame, from_=0, to=255, orient=tk.HORIZONTAL, command=self._on_trackbar_highV)
         self.high_v_scale.grid(row=5, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera1_frame, text="High V").grid(row=5, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera1_frame, textvariable=self.high_v_value, width=5).grid(row=5, column=2, padx=5, pady=5, sticky="w")
+        high_v_entry = ttk.Entry(self.camera1_frame, textvariable=self.high_v_value, width=5)
+        high_v_entry.grid(row=5, column=2, padx=5, pady=5, sticky="w")
+        high_v_entry.bind("<Return>", self._on_entry_change)
         self.high_v_value.set(0)
 
         self.image_label = ttk.Label(self.camera1_frame)
@@ -220,6 +236,30 @@ class CameraProcessor:
 
     def _on_trackbar_highV(self, val):
         self.high_v_value.set(val)
+
+    def _on_entry_change(self, event):
+        entry = event.widget
+        value = entry.get()
+        try:
+            value = float(value)
+            if entry == self.focus_value:
+                self.focus_scale.set(value)
+            elif entry == self.exposure_value:
+                self.exposure_scale.set(value)
+            elif entry == self.lov_h_value:
+                self.lov_h_scale.set(value)
+            elif entry == self.lov_s_value:
+                self.lov_s_scale.set(value)
+            elif entry == self.lov_v_value:
+                self.lov_v_scale.set(value)
+            elif entry == self.high_h_value:
+                self.high_h_scale.set(value)
+            elif entry == self.high_s_value:
+                self.high_s_scale.set(value)
+            elif entry == self.high_v_value:
+                self.high_v_scale.set(value)
+        except ValueError:
+            pass
 
     @staticmethod
     def findPt(contour_main, parent_contour_second, output_image, color=(0, 255, 255)):
