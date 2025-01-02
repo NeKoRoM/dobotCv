@@ -371,7 +371,7 @@ class CameraProcessor:
         self.image = cv2.dilate(self.image, kernel, iterations=1)
 
         # Find contours in the filtered image
-        contours, hierarchy = cv2.findContours(self.image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hierarchy = cv2.findContours(self.image, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
         self.output_image = image.copy()
 
         min_area = 1000
