@@ -417,8 +417,23 @@ class CameraProcessor:
                 if M["m00"] != 0:
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
+                    # Розділити контури на дві частини
                     half_contour = contour[contour[:, :, 0] < cX]
                     half_parent = parent_contour[parent_contour[:, :, 0] < cX]
+
+                    # Знайти точки, найближчі до cX
+                    next_point_contour = contour[contour[:, :, 0] >= cX][0]
+                    prev_point_contour = half_contour[-1]
+                    next_point_parent = parent_contour[parent_contour[:, :, 0] >= cX][0]
+                    prev_point_parent = half_parent[-1]
+
+                    # Обчислити середні точки
+                    mid_point_contour = np.array([[(prev_point_contour[0][0] + next_point_contour[0][0]) // 2, (prev_point_contour[0][1] + next_point_contour[0][1]) // 2]])
+                    mid_point_parent = np.array([[(prev_point_parent[0][0] + next_point_parent[0][0]) // 2, (prev_point_parent[0][1] + next_point_parent[0][1]) // 2]])
+
+                    # Додати середні точки до контурів
+                    half_contour = np.vstack([half_contour, mid_point_contour])
+                    half_parent = np.vstack([half_parent, mid_point_parent])
                     cv2.drawContours(self.output_image, [half_contour], -1, (0, 255, 0), 1)
                     cv2.drawContours(self.output_image, [half_parent], -1, (255, 255, 0), 1)
                     #draw vertical line from center of main contour
