@@ -463,6 +463,8 @@ class CameraProcessor:
                     half_parent = parent_contour[parent_contour[:, :, 0] <= cX]
                     half_contour_right = contour[contour[:, :, 0] >= cX]
                     half_parent_right = parent_contour[parent_contour[:, :, 0] >= cX]
+                    cv2.drawContours(self.output_image, [half_parent_right], -1, (255, 0, 255), 1)
+                    cv2.drawContours(self.output_image, [half_contour_right], -1, (0, 0, 255), 1)
                     cv2.drawContours(self.output_image, [half_parent], -1, (255, 0, 0), 1)
                     cv2.drawContours(self.output_image, [half_contour], -1, (0, 255, 0), 1)
                     right_area = cv2.contourArea(half_parent_right) - cv2.contourArea(half_contour_right)
