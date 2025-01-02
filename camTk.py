@@ -447,8 +447,8 @@ class CameraProcessor:
 
 
                 # Find points and draw contours
-                self.findPt(contour, parent_contour, self.output_image, (255, 255, 0))
-                self.findPt(child_contour, contour, self.output_image, (255, 0, 255))
+                #self.findPt(contour, parent_contour, self.output_image, (255, 255, 0))
+                #self.findPt(child_contour, contour, self.output_image, (255, 0, 255))
 
                 # cv2.drawContours(self.output_image, [contour], -1, (0, 255, 0), 1)
                 # cv2.drawContours(self.output_image, [child_contour], -1, (255, 255, 0), 1)
