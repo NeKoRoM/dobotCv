@@ -352,6 +352,12 @@ class CameraProcessor:
         image = self.picam2.capture_array()
         image = cv2.GaussianBlur(image, (5, 5), 0)
 
+            # Морфологічні операції для видалення шуму
+        kernel = np.ones((5, 5), np.uint8)
+        image = cv2.erode(image, kernel, iterations=1)
+        image = cv2.dilate(image, kernel, iterations=1)
+
+
         # Define HSV range for filtering
         low_black = np.array(camera_settings.hsv_lower, np.uint8)
         high_black = np.array(camera_settings.hsv_upper, np.uint8)
