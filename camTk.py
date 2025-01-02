@@ -419,8 +419,12 @@ class CameraProcessor:
                     cY = int(M["m01"] / M["m00"])
                     half_contour = contour[contour[:, :, 0] <= cX]
                     half_parent = parent_contour[parent_contour[:, :, 0] <= cX]
+                    half_contour_right = contour[contour[:, :, 0] >= cX]
+                    half_parent_right = parent_contour[parent_contour[:, :, 0] >= cX]
                     cv2.drawContours(self.output_image, [half_contour], -1, (0, 255, 0), 1)
                     cv2.drawContours(self.output_image, [half_parent], -1, (255, 255, 0), 1)
+                    cv2.drawContours(self.output_image, [half_contour_right], -1, (0, 255, 0), 1)
+                    cv2.drawContours(self.output_image, [half_parent_right], -1, (255, 255, 0), 1)
                     #draw vertical line from center of main contour
                     cv2.line(self.output_image, (cX, 0), (cX, 480), (0, 255, 255), 1)
                     
