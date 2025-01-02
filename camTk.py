@@ -424,7 +424,7 @@ class CameraProcessor:
                     cv2.drawContours(self.output_image, [half_contour], -1, (0, 255, 0), 1)
                     cv2.drawContours(self.output_image, [half_parent], -1, (255, 0, 0), 1)
                     right_area = cv2.contourArea(half_parent_right) - cv2.contourArea(half_contour_right)
-                    left_area = cv2.contourArea(half_contour) - cv2.contourArea(half_parent)
+                    left_area = cv2.contourArea(half_parent) - cv2.contourArea(half_contour)
                     cv2.putText(self.output_image, f"arreaR: ({right_area}, - {left_area} = {right_area - left_area})", (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
                     #cv2.drawContours(self.output_image, [half_contour_right], -1, (0, 255, 0), 1)
                     #cv2.drawContours(self.output_image, [half_parent_right], -1, (255, 255, 0), 1)
