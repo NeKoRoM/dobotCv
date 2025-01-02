@@ -423,11 +423,13 @@ class CameraProcessor:
                     # cv2.drawContours(self.output_image, [half_parent], -1, (255, 255, 0), 1)
                     # Намалювати всі пікселі half_contour
                     for point in half_contour:
-                        cv2.circle(self.output_image, (point[0][0], point[0][1]), 1, (0, 255, 0), -1)
+                        if len(point) == 1 and len(point[0]) == 2:
+                            cv2.circle(self.output_image, (point[0][0], point[0][1]), 1, (0, 255, 0), -1)
 
                     # Намалювати всі пікселі half_parent
                     for point in half_parent:
-                        cv2.circle(self.output_image, (point[0][0], point[0][1]), 1, (255, 255, 0), -1)
+                        if len(point) == 1 and len(point[0]) == 2:
+                            cv2.circle(self.output_image, (point[0][0], point[0][1]), 1, (255, 255, 0), -1)
                 result += f"Contour {i}: Area={area}, FATHER={parent_idx}\n"
 
         # Close the camera and display the results
