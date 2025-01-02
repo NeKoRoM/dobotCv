@@ -389,7 +389,9 @@ class CameraProcessor:
             if hierarchy[0][i][2] != -1 and hierarchy[0][i][3] != -1:
                 parent_idx = hierarchy[0][i][3]
                 parent_contour = contours[parent_idx]
-
+                area = cv2.contourArea(parent_contour)
+                if area > max_area:
+                    continue
                 previosly_child_idx = hierarchy[0][i][2]  # first child
                 next_child = hierarchy[0][previosly_child_idx][0]  # second child
                 bigest_child_idx = previosly_child_idx
