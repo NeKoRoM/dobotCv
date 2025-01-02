@@ -396,8 +396,7 @@ class CameraProcessor:
 
             # Морфологічні операції для видалення шуму
         kernel = np.ones((3, 3), np.uint8)
-        image = cv2.erode(image, kernel, iterations=1)
-        image = cv2.dilate(image, kernel, iterations=1)
+
 
 
         # Define HSV range for filtering
@@ -486,9 +485,9 @@ class CameraProcessor:
                     bottom_area = cv2.contourArea(half_parent_bottom) - cv2.contourArea(half_contour_bottom)
                     
                     # Display the calculated areas on the image
-                    cv2.putText(self.output_image, f"arreaRL: ({right_area}, - {left_area} = {right_area - left_area})", (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+                    cv2.putText(self.output_image, f"arreaR-L: ({right_area}, - {left_area} = {right_area - left_area})", (cX, cY), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
 
-                    cv2.putText(self.output_image, f"areaTB: ({top_area}, - {bottom_area} = {top_area - bottom_area})", (cX, cY+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
+                    cv2.putText(self.output_image, f"areaT-B: ({top_area}, - {bottom_area} = {top_area - bottom_area})", (cX, cY+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
 
 
                 result += f"Contour {i}: Area={area}, FATHER={parent_idx}\n"
