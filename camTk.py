@@ -419,17 +419,13 @@ class CameraProcessor:
                     cY = int(M["m01"] / M["m00"])
                     half_contour = contour[contour[:, :, 0] < cX]
                     half_parent = parent_contour[parent_contour[:, :, 0] < cX]
-                    # cv2.drawContours(self.output_image, [half_contour], -1, (0, 255, 0), 1)
-                    # cv2.drawContours(self.output_image, [half_parent], -1, (255, 255, 0), 1)
-                    # Намалювати всі пікселі half_contour
-                    for point in half_contour:
-                        if len(point) == 1 and len(point[0]) == 2:
-                            cv2.circle(self.output_image, (point[0][0], point[0][1]), 1, (0, 255, 0), -1)
+                    cv2.drawContours(self.output_image, [half_contour], -1, (0, 255, 0), 1)
+                    cv2.drawContours(self.output_image, [half_parent], -1, (255, 255, 0), 1)
+                    #draw vertical line from center of main contour
+                    cv2.line(self.output_image, (cX, 0), (cX, 480), (0, 255, 255), 1)
+                    
 
-                    # Намалювати всі пікселі half_parent
-                    for point in half_parent:
-                        if len(point) == 1 and len(point[0]) == 2:
-                            cv2.circle(self.output_image, (point[0][0], point[0][1]), 1, (255, 255, 0), -1)
+
                 result += f"Contour {i}: Area={area}, FATHER={parent_idx}\n"
 
         # Close the camera and display the results
