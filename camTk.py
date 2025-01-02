@@ -435,8 +435,8 @@ class CameraProcessor:
                     half_parent_bottom = parent_contour[parent_contour[:, :, 1] >= cY]
                     
                     # Draw contours for the top half
-                    cv2.drawContours(self.output_image, [half_contour_top], -1, (0, 255, 0), 1)
-                    cv2.drawContours(self.output_image, [half_parent_top], -1, (255, 0, 0), 1)
+                    cv2.drawContours(self.output_image, [half_contour_top], -1, (0, 255, 255), 1)
+                    cv2.drawContours(self.output_image, [half_parent_top], -1, (255, 255, 0), 1)
                     
                     # Calculate areas for the top and bottom halves
                     top_area = cv2.contourArea(half_parent_top) - cv2.contourArea(half_contour_top)
