@@ -417,7 +417,7 @@ class CameraProcessor:
         self.output_image = image.copy()
 
         min_area = 1000
-        max_area = 150000
+        max_area = 1500000
         result = ""
 
         # Process each contour
