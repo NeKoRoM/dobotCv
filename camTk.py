@@ -322,6 +322,7 @@ class CameraProcessor:
     def run(self):
         self.process_frame()
 
+
         focus_track = self.focus_scale.get()
         if focus_track != self.prev_focus:
             self.prev_focus = focus_track
@@ -341,6 +342,8 @@ class CameraProcessor:
         # Initialize the camera
         self.picam2 = Picamera2()
         self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
+        self.picam2.set_controls({"AfMode": controls.AfModeEnum.Manual, "LensPosition": camera_settings.focus})
+        self.picam2.set_controls({"ExposureTime": int(camera_settings.exposure * 10)})  # Ensure exposure time is an integer
         self.picam2.start()
         time.sleep(2)
 
