@@ -417,7 +417,10 @@ class CameraProcessor:
                 if M["m00"] != 0:
                     cX = int(M["m10"] / M["m00"])
                     cY = int(M["m01"] / M["m00"])
-
+                    half_contour = contour[contour[:, :, 0] < cX]
+                    half_parent = parent_contour[parent_contour[:, :, 0] < cX]
+                    cv2.drawContours(self.image, [half_contour], -1, (0, 255, 0), 1)
+                    cv2.drawContours(self.image, [half_parent], -1, (255, 255, 0), 1)
 
                 result += f"Contour {i}: Area={area}, FATHER={parent_idx}\n"
 
