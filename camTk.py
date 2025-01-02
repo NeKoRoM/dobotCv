@@ -365,6 +365,10 @@ class CameraProcessor:
         # Convert the image to HSV color space and apply the filter
         img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         self.image = cv2.inRange(img_hsv, low_black, high_black)
+                    # Морфологічні операції для видалення шуму
+        kernel = np.ones((5, 5), np.uint8)
+        self.image = cv2.erode(self.image, kernel, iterations=1)
+        self.image = cv2.dilate(self.image, kernel, iterations=1)
 
         # Find contours in the filtered image
         contours, hierarchy = cv2.findContours(self.image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
