@@ -246,13 +246,13 @@ class CameraProcessor:
         cv2.line(output_image, (xL, yL), (x_parentL, y_parentL), color, 1)
         cv2.putText(output_image, f"Right width: {x_parent - x}px", (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
 
-    def update_image_label(self, image, label):
+    def update_image_label(self, image, label, resize=1):
         if image is not None:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             image = Image.fromarray(image)
             # Resize the image to half its original size
             width, height = image.size
-            image = image.resize((width // 2, height // 2), Image.ANTIALIAS)
+            image = image.resize((width // resize, height // resize), Image.ANTIALIAS)
             image_tk = ImageTk.PhotoImage(image)
             label.config(image=image_tk)
             label.image = image_tk
@@ -316,8 +316,8 @@ class CameraProcessor:
         self.prev_time = current_time
         cv2.putText(self.output_image, f"{fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-        self.update_image_label(self.image, self.image_label)
-        self.update_image_label(self.output_image, self.output_image_label)
+        self.update_image_label(self.image, self.image_label , 3)
+        self.update_image_label(self.output_image, self.output_image_label, 4)
 
     def run(self):
         self.process_frame()
