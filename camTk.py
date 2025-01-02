@@ -358,8 +358,8 @@ class CameraProcessor:
         self.prev_time = current_time
         cv2.putText(self.output_image, f"{fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
-        self.update_image_label(self.image, self.image_label , 2)
-        self.update_image_label(self.output_image, self.output_image_label, 4)
+        self.update_image_label(self.image, self.image_label , 4)
+        self.update_image_label(self.output_image, self.output_image_label, 2)
 
     def run(self):
         self.process_frame()
