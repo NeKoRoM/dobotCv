@@ -350,10 +350,10 @@ class CameraProcessor:
         # Apply the provided camera settings
         self.set_settings(camera_settings)
         image = self.picam2.capture_array()
-        image = cv2.GaussianBlur(image, (5, 5), 0)
+        image = cv2.GaussianBlur(image, (2, 2), 0)
 
             # Морфологічні операції для видалення шуму
-        kernel = np.ones((5, 5), np.uint8)
+        kernel = np.ones((2, 2), np.uint8)
         image = cv2.erode(image, kernel, iterations=1)
         image = cv2.dilate(image, kernel, iterations=1)
 
@@ -366,7 +366,7 @@ class CameraProcessor:
         img_hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         self.image = cv2.inRange(img_hsv, low_black, high_black)
                     # Морфологічні операції для видалення шуму
-        kernel = np.ones((5, 5), np.uint8)
+        kernel = np.ones((2, 2), np.uint8)
         self.image = cv2.erode(self.image, kernel, iterations=1)
         self.image = cv2.dilate(self.image, kernel, iterations=1)
 
@@ -375,12 +375,15 @@ class CameraProcessor:
         self.output_image = image.copy()
 
         min_area = 1000
+        max_area = 150000
         result = ""
 
         # Process each contour
         for i, contour in enumerate(contours):
             area = cv2.contourArea(contour)
             if area < min_area:
+                continue
+            if area > max_area:
                 continue
 
             if hierarchy[0][i][2] != -1 and hierarchy[0][i][3] != -1:
