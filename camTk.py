@@ -54,13 +54,14 @@ class CameraProcessor:
         ttk.Label(self.camera_frame, text="Focus").grid(row=0, column=1, padx=5, pady=5, sticky="w")
         ttk.Entry(self.camera_frame, textvariable=self.focus_value, width=5).grid(row=0, column=2, padx=5, pady=5, sticky="w")
         self.focus_value.set(self.prev_focus)
-
+        
+        vcmd = (self.register(self._on_trackbar_exp), '%P')
         self.exposure_value = tk.StringVar()
         self.exposure_scale = ttk.Scale(self.camera_frame, from_=0, to=100000, orient=tk.HORIZONTAL, command=self._on_trackbar_exp)
         self.exposure_scale.set(self.prev_exposure)
         self.exposure_scale.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera_frame, text="Exposure").grid(row=1, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10, validate= 'all', validatecommand=self._on_trackbar_exp).grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10, validate= 'all', validatecommand=vcmd).grid(row=1, column=2, padx=5, pady=5, sticky="w")
         self.exposure_value.set(self.prev_exposure)
 
         self.lov_h_value = tk.StringVar()
