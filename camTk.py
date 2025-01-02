@@ -60,7 +60,7 @@ class CameraProcessor:
         self.exposure_scale.set(self.prev_exposure)
         self.exposure_scale.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
         ttk.Label(self.camera_frame, text="Exposure").grid(row=1, column=1, padx=5, pady=5, sticky="w")
-        ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10).grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        ttk.Entry(self.camera_frame, textvariable=self.exposure_value, width=10, validate= 'all', validatecommand=self._on_trackbar_exp).grid(row=1, column=2, padx=5, pady=5, sticky="w")
         self.exposure_value.set(self.prev_exposure)
 
         self.lov_h_value = tk.StringVar()
